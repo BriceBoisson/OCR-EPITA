@@ -1,0 +1,1 @@
+/* Fonction pour detecter les espaces entre les mots */
