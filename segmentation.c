@@ -5,35 +5,34 @@
 
 void lines(SDL_Surface* img)
 {
-    int w = img -> w;// width of img
-    int h = img -> h;// height of img
-    int x;// variable for loops
+    int w = img -> w;
+    int h = img -> h;
+    int x;
     Uint8 r , g , b;
-    // Uint8 = signed number from 0 to 255 included
     Uint32 pixel;
     int line = 0;// mark the presence of line, here it has not
     int black = 0;// mark the presence of black pixel
     int begin;// line of the beginning of black pixel's presence
-    int end;// line of end of it
+    int end;// line of end of black pixel's presence
 
-    for(int y = 0; y < h; y++)// through the lines
+    for(int y = 0; y < h; y++)// by line
     {
-        for(x = 0; x < w; x++)// through the columns
+        for(x = 0; x < w; x++)// by column
         {
             pixel = get_pixel(img, x, y);
-            // get colors of pixel
+            // get color
             SDL_GetRGB(pixel, img->format, &r, &g, &b);
 
             if(!r)// if pixel is black
             {
-                black = 1;// black = true
-                break;// exit the loop
+                black = 1;
+                break;
             }
         }
 
         if(black && !line)// if line has black pixels
         {
-            line = 1;// line = true
+            line = 1;
             begin = y;// conserve the index of the line
 
             for(x = 0; x < w; x++)
