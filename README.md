@@ -1,6 +1,6 @@
 # OCR-EPITA 
 
-1Our third semester project about character recognition written exclusively in C language, we hope you will enjoy it!
+Our third semester project about character recognition written exclusively in C language, we hope you will enjoy it!
 
 ## Download
 
