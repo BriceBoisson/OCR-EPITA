@@ -15,8 +15,4 @@ void cuttedSurface(SDL_Surface *img, int firstCut,
 
 void charCut(SDL_Surface *img);
 
-SDL_Surface* increaseChar(SDL_Surface *img);
-
-void isolateChar(SDL_Surface *img, struct Neural_Network *net);
-
 # endif
