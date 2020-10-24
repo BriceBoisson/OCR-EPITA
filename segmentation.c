@@ -171,3 +171,146 @@ void DrawAColumn(SDL_Surface *img,int y, int x, int end_line)
     
  }
 }
+
+
+
+
+/*  Blocks cutting  */
+
+
+int pixelSpacingHorizontal(SDL_Surface *img)
+{
+  Uint32 pixel;
+  Uint8 r;
+  Uint8 g;
+  Uint8 b;
+  int white = 0;
+  int black = 0;
+
+  for(int i = 0; i < img -> h; i++)
+  {
+    for(int j = 0; j < img -> w; j++)
+    {
+      pixel = getpixel(img, j, i);
+      SDL_GetRGB(pixel, img -> format, &r, &g, &b);
+      if(r == 255 && g == 255 && b == 255)
+      {white++;}
+      else
+      {black++;}
+    }
+
+  }
+  return (white / (black / 2));
+}
+
+int pixelSpacingVertical(SDL_Surface *img)
+{
+  Uint32 pixel;
+  Uint8 r;
+  Uint8 g;
+  Uint8 b;
+  int white = 0;
+  int black = 0;
+
+  for(int i = 0; i < img -> w; i++)
+  {
+    for(int j = 0; j < img -> h; j++)
+    {
+      pixel = getpixel(img, i, j);
+      SDL_GetRGB(pixel, img -> format, &r, &g, &b);
+      if(r == 255 && g == 255 && b == 255)
+      {white++;}
+      else
+      {black++;}
+    }
+  }
+  return(white / (black / 2));
+}
+
+
+/*  RLSA algorithm  */
+
+void blockDetection_horizontal(SDL_Surface *img)
+{ 
+  Uint32 pixel;
+  Uint8 r;
+  Uint8 g;
+  Uint8 b;
+  int hori = pixelSpacingHorizontal(img)*4;
+  int countWhite;
+
+  for(int i = 0; i < img -> h; i++)
+  {
+    countWhite = 0;
+    for(int j = 0; j < img -> w; j++)
+    {
+      pixel = getpixel(img, j, i);
+      SDL_GetRGB(pixel, img -> format, &r, &g, &b);
+      if(r == 255 && g == 255 && b == 255)
+      {
+        countWhite++;
+      }
+      if(r == 0 && g == 0 && b == 0)
+      {
+        if(countWhite <= hori)
+        {
+            int k = j - 1;
+            while(countWhite > 0)
+            {
+              pixel = SDL_MapRGB(img -> format, 0, 0, 0);
+              putpixel(img, k, i, pixel);
+              countWhite--;
+              k--;
+            }
+        }
+        else
+        {
+          countWhite = 0;
+        }
+      }
+    }
+  }
+}
+void blockDetection_vertical(SDL_Surface *img)
+{
+  Uint32 pixel;
+  Uint8 r;
+  Uint8 g;
+  Uint8 b;
+  int verti = pixelSpacingVertical(img) * 4;
+  int countBlack;
+
+  for(int i = 0; i < img -> w; i++)
+  {
+    countBlack = 0;
+    for(int j = 0; j < img -> h; j++)
+    {
+      pixel = getpixel(img, i, j);
+      SDL_GetRGB(pixel, img -> format, &r, &g, &b);
+      if(r == 255 && g == 255 && b == 255)
+      {
+        countBlack++;
+      }
+      else
+      {
+        if(countBlack <= verti)
+        {
+            int k = j - 1;
+            while(countBlack > 0)
+            {
+              pixel = SDL_MapRGB(img -> format, 0, 0, 0);
+              putpixel(img, i, k, pixel);
+              countBlack--;
+              k--;
+            }
+        }
+        else
+        {
+          countBlack = 0;
+        }
+      }
+    }
+  }
+}
+
+
