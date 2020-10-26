@@ -152,7 +152,7 @@ void DrawAColumn(SDL_Surface *img,int y, int x, int end_line)
     
   for(int i = x; i < end_line; i++)
  { 
-    pixel = SDL_MapRGB(img->format, 255, 255, 0);
+    pixel = SDL_MapRGB(img->format, 0, 116, 199);
     putpixel(img, y, i, pixel);
     
  }
@@ -291,4 +291,95 @@ void blockDetection_vertical(SDL_Surface *img)
       }
     }
   }
+}
+
+
+int* histo(SDL_Surface *img)
+{
+  Uint32 pixel;
+  Uint8 r, g, b;
+  int w;
+  w = img -> w;
+  int h;
+  h = img -> h;
+  int* histo = malloc(w * sizeof(int));
+
+  for(int r = 0;r< w;r++ )
+  {
+      histo[r]=0;
+  }
+
+  for (int i = 0; i< w ; i ++) {
+    int s = 0;
+    for (int j = 0; j < h ; j++) {
+      pixel = getpixel(img,i,j);
+      SDL_GetRGB(pixel, img->format, &r, &g, &b);
+
+      if ( r== 255) {
+        s++; 
+      }
+    }
+    histo[i]= h -s;
+  }
+  return histo;
+
+}
+
+void cutchar(SDL_Surface *img){
+  int* histog=histo(img);
+  for (int i = 0; i < img -> w; i++){
+    if (histog[i]==0 || histog[i]==1){
+      DrawAColumn(img, i, 0,img->h -1);
+    }
+  } 
+}
+
+int seuil(SDL_Surface *img)
+{
+    int* histog=histo(img);
+    int max = 0;
+    int s =0;
+    for(int i = 0;i < img -> w;i++){
+        if (histog[i]==0){
+            s++;
+        }
+        else
+        {
+            if (s > max){
+                max = s;
+            }
+            s =0;
+        }
+        
+    }
+    return max;
+}
+
+void cutword(SDL_Surface *img){
+  int* histog=histo(img);
+  int seuil1 = seuil(img);
+  int bool1 = 1;
+  int s =0;
+  int pos = 0;
+  printf("%i",seuil1);
+ 
+  for (int i = 0; i<img -> w; i++){
+      printf("%i \n",s);
+   if (histog[i]==0){
+       if(bool1){
+           pos = i;
+           bool1 = 0;
+       }
+        s++;
+    }
+    else{
+        if (s>= seuil1 -5 && s <= seuil1 +5)
+        {
+            DrawAColumn(img, pos, 0,img->h);
+        }
+        bool1=1;
+        s =0;
+    }
+    
+  } 
 }

@@ -7,6 +7,14 @@
 
 void CutLines(SDL_Surface *img);
 
+void cutword(SDL_Surface *img);
+
+int seuil(SDL_Surface *img);
+
+int* histo(SDL_Surface *img);
+
+void cutchar(SDL_Surface *img);
+
 int pixelSpacingHorizontal(SDL_Surface *img);
 
 int pixelSpacingVertical(SDL_Surface *img);

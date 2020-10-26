@@ -2,6 +2,7 @@
 #include "Segmentation/segmentation.h"
 #include <string.h>
 #include "display.h"
+#include "SDL2/SDL_image.h"
 
 
 int main(int argc, char *argv[])
@@ -22,6 +23,15 @@ int main(int argc, char *argv[])
 
     SDL_Surface *loadedImage = 0;
     loadedImage = SDL_LoadBMP(argv[2]);
+
+    /*binerize(loadedImage);
+
+    int* r = histo(loadedImage);
+
+    for (int i = 0; i < loadedImage -> w; i++)
+    {
+        printf("%i \n", r[i]);
+    }*/
 
     SDL_Window *window = display_img(loadedImage);
 
@@ -61,6 +71,17 @@ int main(int argc, char *argv[])
 
        if (strcmp(argv[1], "RLSAh") == 0) {
         blockDetection_horizontal(loadedImage);
+        window = display_img(loadedImage);
+        wait_for_keypressed();
+    }
+       if (strcmp(argv[1], "C") == 0) {
+        grayscale(loadedImage);
+        window = display_img(loadedImage);
+        wait_for_keypressed();
+        binerize(loadedImage);
+        window = display_img(loadedImage);
+        wait_for_keypressed();
+        cutword(loadedImage);
         window = display_img(loadedImage);
         wait_for_keypressed();
     }

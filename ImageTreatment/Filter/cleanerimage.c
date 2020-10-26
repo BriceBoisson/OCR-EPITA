@@ -20,7 +20,7 @@ void grayscale(SDL_Surface *img)
             pixel = getpixel(img, i,j);
             SDL_GetRGB(pixel, img->format, &r,&g,&b);
             /*maybe change this value*/
-            Uint8 results = (21 *r +72*g+7*b)/100; 
+            Uint8 results = 0.3*r + 0.59*g + 0.11*b;
             pixel = SDL_MapRGB(img -> format,results,results,results);
             putpixel(img,i,j,pixel);
         }
@@ -49,7 +49,7 @@ void binerize(SDL_Surface *img)
      
 
     
-     if(average > 140) /*we can make an average here*/
+     if(average > 150) /*we can make an average here*/
      {
       r = 255;
       g = 255;
