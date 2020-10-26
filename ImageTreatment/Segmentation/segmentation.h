@@ -2,10 +2,18 @@
 
 #define _SEGMENTATION_H
 
-# include "tools.h"
+# include "../Tools/tools.h"
 # include <SDL2/SDL.h>
 
 void CutLines(SDL_Surface *img);
+
+int pixelSpacingHorizontal(SDL_Surface *img);
+
+int pixelSpacingVertical(SDL_Surface *img);
+
+void blockDetection_horizontal(SDL_Surface *img);
+
+void blockDetection_vertical(SDL_Surface *img);
 
 void CutColumn(SDL_Surface * img, int begin_line, int end_line);
 

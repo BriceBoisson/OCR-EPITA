@@ -2,7 +2,7 @@
 
 #define _CLEANERIMAGE_H
 
-# include "tools.h"
+# include "../Tools/tools.h"
 # include <SDL2/SDL.h>
 
 void grayscale(SDL_Surface *img);
