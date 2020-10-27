@@ -151,7 +151,7 @@ void DrawAColumn(SDL_Surface *img,int y, int x, int end_line)
     
   for(int i = x; i < end_line; i++)
  { 
-    pixel = SDL_MapRGB(img->format, 0, 116, 199);
+    pixel = SDL_MapRGB(img->format, 1, 100, 100);
     putpixel(img, y, i, pixel);
     
  }
