@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
         printf("%i \n", r[i]);
     }*/
 
-    SDL_Window *window = display_img(loadedImage);
+    display_img(loadedImage);
 
     wait_for_keypressed();
 
@@ -47,42 +47,42 @@ int main(int argc, char *argv[])
 
     if (strcmp(argv[1], "grayscale") == 0) {
         grayscale(loadedImage);
-        window = display_img(loadedImage);
+        display_img(loadedImage);
         wait_for_keypressed();
     }
 
     if (strcmp(argv[1], "CutCharactere") == 0) {
         CutLines(loadedImage);
-        window = display_img(loadedImage);
+        display_img(loadedImage);
         wait_for_keypressed();
     }
 
       if (strcmp(argv[1], "RLSAv") == 0) {
         blockDetection_vertical(loadedImage);
-        window = display_img(loadedImage);
+        display_img(loadedImage);
         wait_for_keypressed();
     }
 
      if (strcmp(argv[1], "binerize") == 0) {
         binerize(loadedImage);
-        window = display_img(loadedImage);
+        display_img(loadedImage);
         wait_for_keypressed();
     }
 
        if (strcmp(argv[1], "RLSAh") == 0) {
         blockDetection_horizontal(loadedImage);
-        window = display_img(loadedImage);
+        display_img(loadedImage);
         wait_for_keypressed();
     }
        if (strcmp(argv[1], "C") == 0) {
         grayscale(loadedImage);
-        window = display_img(loadedImage);
+        display_img(loadedImage);
         wait_for_keypressed();
         binerize(loadedImage);
-        window = display_img(loadedImage);
+        display_img(loadedImage);
         wait_for_keypressed();
         cutword(loadedImage);
-        window = display_img(loadedImage);
+        display_img(loadedImage);
         wait_for_keypressed();
     }
 
