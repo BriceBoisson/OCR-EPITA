@@ -166,11 +166,11 @@ void drawBlocksLines (SDL_Surface *img, SDL_Surface *imgRLSA)
     {
       pixelRLSA = getpixel(imgRLSA, i, j);
       SDL_GetRGB(pixel, imgRLSA -> format, &r, &g, &b);
-      if (r == 255 && g == 255 && b == 255)    // si le pixel est noir, on regarde les pixels autour, si un d'eux est blanc alors
+      if (r == 0 && g == 0 && b == 0)    // si le pixel est noir, on regarde les pixels autour, si un d'eux est blanc alors
       {                                        // notre pixel est en bordure de bloc donc on le rend bleu
         pixelUp = getpixel(imgRLSA, i, j-1);
         SDL_GetRGB(pixelUp, imgRLSA -> format, &r, &g, &b);
-        if (r == 0 && g == 0 && b == 0)    // pixel du haut
+        if (r == 255 && g == 255 && b == 255)    // pixel du haut
         {
           pixel = SDL_MapRGB(img -> format, 0, 0, 255);
           putpixel(img, i, j, pixel);
@@ -179,7 +179,7 @@ void drawBlocksLines (SDL_Surface *img, SDL_Surface *imgRLSA)
         {
           pixelDown = getpixel(imgRLSA, i, j+1);
           SDL_GetRGB(pixelDown, imgRLSA -> format, &r, &g, &b);
-          if(r == 0 && g == 0 && b == 0)    // pixel d'en bas
+          if(r == 255 && g == 255 && b == 255)    // pixel d'en bas
           {
             pixel = SDL_MapRGB(img -> format, 0, 0, 255);
             putpixel(img, i, j, pixel);
@@ -188,7 +188,7 @@ void drawBlocksLines (SDL_Surface *img, SDL_Surface *imgRLSA)
           {
             pixelLeft = getpixel(imgRLSA, i-1, j);
             SDL_GetRGB(pixelLeft, imgRLSA -> format, &r, &g, &b);
-            if(r == 0 && g == 0 && b == 0)    // pixel de gauche
+            if(r == 255 && g == 255 && b == 255)    // pixel de gauche
             {
               pixel = SDL_MapRGB(img -> format, 0, 0, 255);
               putpixel(img, i, j, pixel);
@@ -197,7 +197,7 @@ void drawBlocksLines (SDL_Surface *img, SDL_Surface *imgRLSA)
             {
               pixelRight = getpixel(imgRLSA, i+1, j);
               SDL_GetRGB(pixelRight, imgRLSA -> format, &r, &g, &b);
-              if(r == 0 && g == 0 && b == 0)    // pixel de droite
+              if(r == 255 && g == 255 && b == 255)    // pixel de droite
               {
                 pixel = SDL_MapRGB(img -> format, 0, 0, 255);
                 putpixel(img, i, j, pixel);
