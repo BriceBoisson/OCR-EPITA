@@ -21,6 +21,7 @@ int FindBlackPixel(SDL_Surface *img, int x)
         bool = 0;
         break;
     }
+    
  }
 
  return bool;
