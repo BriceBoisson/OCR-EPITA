@@ -59,7 +59,7 @@ int pixelSpacingVertical(SDL_Surface *img)
 
 // RLSA
 
-// remplis les espaces horizontaux entre deux blocs en noir
+// remplis les espaces horizontaux entre deux pixels en noir
 void blockDetection_horizontal(SDL_Surface *img)
 { 
   Uint32 pixel;
@@ -102,7 +102,7 @@ void blockDetection_horizontal(SDL_Surface *img)
   }
 }
 
-// remplis les espaces verticaux entre deux blocs. fonctionne pareil que la version horizontale
+// remplis les espaces verticaux entre deux pixels. fonctionne pareil que la version horizontale
 void blockDetection_vertical(SDL_Surface *img)
 {
   Uint32 pixel;
@@ -146,8 +146,35 @@ void blockDetection_vertical(SDL_Surface *img)
 }
 
 
+// dessine les blocs en les noircissant entierement (fait un ET logique du RLSA horizontal et RLSA vertical)
+// img c'est l'image qui va contenir des blocs remplis de noir
+// imgHor a subi bloc detection horizontal
+// imgver a subi bloc detection vertical
+void drawBlocks (SDL_Surface *img, SDL_Surface *imgHor, SDL_Surface *imgVer)
+{
+    Uint32 pixelHor;
+    Uint32 pixelVer;
+    Uint32 pixel;
+    Uint8 r;
+    Uint8 g;
+    Uint8 b;
+    pixelHor = getpixel(imgHor, i, j);
+    SDL_GetRGB(pixelHor, imgHor -> format, &r, &g, &b);
+    if (r == 0 && g == 0 && b == 0)
+    {
+        pixelVer = getpixel(imgVer, i, j);
+        SDL_GetRGB(pixelVer, imgVer -> format, &r, &g, &b);
+        if (r==0 && g==0 && b==0)
+        {
+            pixel = SDL_MapRGB(img -> format, 0, 0, 0);
+             putpixel(img, i, j, pixel);
+        }
+    }
+}
+
 
 // Trace les lignes des blocs avec le RLSA
+// img c'est l'image avec le texte et imgRLSA c'est l'image qui a subi blockDrawing
 void drawBlocksLines (SDL_Surface *img, SDL_Surface *imgRLSA)
 {
   Uint32 pixel;
