@@ -6,11 +6,10 @@ int FindBlackPixel(SDL_Surface *img, int x)
 {
   Uint32 pixel;
   int w;
-  int h;
   Uint8 r, g, b;
   int bool = 1; /*A boolean that memorize if the line contain black pixel or not*/
   w = img -> w;
-  h = img -> h;
+  
 
   for(int i = 0; i < w; i++)
  {
