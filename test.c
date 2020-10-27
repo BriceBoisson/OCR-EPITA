@@ -20,10 +20,11 @@ int main()
     input[1]=0;
     nn = init_nn(input);
     nn = walkthrough(nn);
-    double avCost = averageCost(5000);
+    double avCost = averageCost(5000, nn);
     printf("averageCost = %f\n",avCost);
-    trainingSession(nn,101534,46545654);
-    avCost = averageCost(5000);
+    nn = trainingSession(nn,900000,avCost);
+    // params : neural network, TrainingDuration, rate
+    avCost = averageCost(5000, nn);
     printf("averageCost after training = %f\n",avCost);
     
 }

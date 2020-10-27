@@ -45,43 +45,7 @@ double averageCost(int trainingDuration, Neural_network nn)
     return avCost/trainingDuration;
 }
 
-//~ int gradient(Neural_network nn, int y, double* dC)
-//~ {
-    
-    //~ int len_layer = sizeof(nn.layer)/sizeof(double);
-    //~ int len_inputs = sizeof(nn.input)/sizeof(int);
-    //~ int len_outputs = sizeof(nn.output)/sizeof(double);
-    
-
-    //~ for (int k = 0; k< (len_inputs*len_layer); k++)
-    //~ {
-        //~ for (int i =0; i< len_inputs;i++)
-        //~ {
-            //~ for (int j = 0; j<len_layer;j++)
-            //~ {
-                //~ dC[k]=nn.input[i]*primeSigmoid(nn.z[j]-nn.layer[j])*2*(nn.layer[j]-y);
-            //~ }
-            
-        //~ }
-        
-    //~ }
-    //~ for (int k = 0; k< (len_outputs*len_layer); k++)
-    //~ {
-        //~ for (int i =0; i< len_layer;i++)
-        //~ {
-            //~ for (int j = 0; j<len_outputs;j++)
-            //~ {
-                //~ dC[k+len_inputs*len_layer]=nn.layer[i]*primeSigmoid(nn.z[j])*2*(nn.output[j]-y);
-            //~ }
-            
-        //~ }
-        
-    //~ }
-    //~ return EXIT_SUCCESS;
-    
-//~ }
-
-int backpropagation(Neural_network nn, int inputs[2], int y, double rate)
+Neural_network backpropagation(Neural_network nn, int inputs[2], int y, double rate)
 {
     int len_layer = sizeof(nn.layer)/sizeof(double);
     int len_inputs = sizeof(nn.input)/sizeof(int);
@@ -103,5 +67,5 @@ int backpropagation(Neural_network nn, int inputs[2], int y, double rate)
             nn.weights[i*len_inputs+j] -= rate * totalError * primeSigmoid(nn.layer[i]) * inputs[j];
         }
     }
-    return EXIT_SUCCESS;
+    return nn;
 }

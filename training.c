@@ -16,7 +16,7 @@ int inputs[2];
 
 //training part!
 
-int trainingSession(Neural_network nn, int sessionDuration, double rate)
+Neural_network trainingSession(Neural_network nn, int sessionDuration, double rate)
 {
     //~ double dC[len_inputs*len_layer+len_layer*len_outputs];
 
@@ -43,8 +43,8 @@ int trainingSession(Neural_network nn, int sessionDuration, double rate)
             //~ }
             
         //~ }
-        backpropagation(nn, inputs, expectedResult(nn.input[0],nn.input[1]),rate);
+        nn = backpropagation(nn, inputs, expectedResult(nn.input[0],nn.input[1]),rate);
     }
-    return EXIT_SUCCESS;
+    return nn;
     
 }

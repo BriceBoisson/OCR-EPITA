@@ -3,7 +3,7 @@
 
 double costFunction(int inputs[2]);
 int* generateInputs();
-double averageCost(int trainingDuration);
+double averageCost(int trainingDuration, Neural_network nn);
 int gradient(Neural_network nn, int y, double* dC);
-int backpropagation(Neural_network nn, int inputs[2], int y, double rate);
+Neural_network backpropagation(Neural_network nn, int inputs[2], int y, double rate);
 #endif
