@@ -160,9 +160,9 @@ void drawBlocksLines (SDL_Surface *img, SDL_Surface *imgRLSA)
   Uint8 g;
   Uint8 b;
 
-  for(int i = 0; i < img -> w; i++)
+  for(int i = 1; i + 1 < img -> w; i++)
   {
-    for(int j = 0; j < img -> h; j++)
+    for(int j = 1; j + 1< img -> h; j++)
     {
       pixelRLSA = getpixel(imgRLSA, i, j);
       SDL_GetRGB(pixel, imgRLSA -> format, &r, &g, &b);
