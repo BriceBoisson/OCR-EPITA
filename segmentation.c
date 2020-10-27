@@ -151,6 +151,7 @@ void blockDetection_vertical(SDL_Surface *img)
 void drawBlocksLines (SDL_Surface *img, SDL_Surface *imgRLSA)
 {
   Uint32 pixel;
+  Uint32 pixelRLSA;
   Uint32 pixelUp;
   Uint32 pixelDown;
   Uint32 pixelLeft;
@@ -163,12 +164,12 @@ void drawBlocksLines (SDL_Surface *img, SDL_Surface *imgRLSA)
   {
     for(int j = 0; j < img -> h; j++)
     {
-      pixel = getpixel(img, i, j);
-      SDL_GetRGB(pixel, img -> format, &r, &g, &b);
+      pixelRLSA = getpixel(imgRLSA, i, j);
+      SDL_GetRGB(pixel, imgRLSA -> format, &r, &g, &b);
       if (r == 255 && g == 255 && b == 255)    // si le pixel est noir, on regarde les pixels autour, si un d'eux est blanc alors
       {                                        // notre pixel est en bordure de bloc donc on le rend bleu
-        pixelUp = getpixel(img, i, j-1);
-        SDL_GetRGB(pixelUp, img -> format, &r, &g, &b);
+        pixelUp = getpixel(imgRLSA, i, j-1);
+        SDL_GetRGB(pixelUp, imgRLSA -> format, &r, &g, &b);
         if (r == 0 && g == 0 && b == 0)    // pixel du haut
         {
           pixel = SDL_MapRGB(img -> format, 0, 0, 255);
@@ -176,8 +177,8 @@ void drawBlocksLines (SDL_Surface *img, SDL_Surface *imgRLSA)
         }
         else
         {
-          pixelDown = getpixel(img, i, j+1);
-          SDL_GetRGB(pixelDown, img -> format, &r, &g, &b);
+          pixelDown = getpixel(imgRLSA, i, j+1);
+          SDL_GetRGB(pixelDown, imgRLSA -> format, &r, &g, &b);
           if(r == 0 && g == 0 && b == 0)    // pixel d'en bas
           {
             pixel = SDL_MapRGB(img -> format, 0, 0, 255);
@@ -185,8 +186,8 @@ void drawBlocksLines (SDL_Surface *img, SDL_Surface *imgRLSA)
           }
           else
           {
-            pixelLeft = getpixel(img, i-1, j);
-            SDL_GetRGB(pixelLeft, img -> format, &r, &g, &b);
+            pixelLeft = getpixel(imgRLSA, i-1, j);
+            SDL_GetRGB(pixelLeft, imgRLSA -> format, &r, &g, &b);
             if(r == 0 && g == 0 && b == 0)    // pixel de gauche
             {
               pixel = SDL_MapRGB(img -> format, 0, 0, 255);
@@ -194,8 +195,8 @@ void drawBlocksLines (SDL_Surface *img, SDL_Surface *imgRLSA)
             }
             else
             {
-              pixelRight = getpixel(img, i+1, j);
-              SDL_GetRGB(pixelRight, img -> format, &r, &g, &b);
+              pixelRight = getpixel(imgRLSA, i+1, j);
+              SDL_GetRGB(pixelRight, imgRLSA -> format, &r, &g, &b);
               if(r == 0 && g == 0 && b == 0)    // pixel de droite
               {
                 pixel = SDL_MapRGB(img -> format, 0, 0, 255);
