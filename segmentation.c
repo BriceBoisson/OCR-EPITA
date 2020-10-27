@@ -1,181 +1,8 @@
 #include "segmentation.h"
 
 
-/*find if a line contain black pixel*/
-int FindBlackPixel(SDL_Surface *img, int x)
-{
-  Uint32 pixel;
-  int w;
-  int h;
-  Uint8 r, g, b;
-  int bool = 1; /*A boolean that memorize if the line contain black pixel or not*/
-  w = img -> w;
-  h = img -> h;
 
-  for(int i = 0; i < w; i++)
- {
-    pixel = getpixel(img,i,x);
-    SDL_GetRGB(pixel, img->format, &r, &g, &b);
-
-    if (r == 0)
-    {
-        bool = 0;
-        break;
-    }
- }
-
- return bool;
-}
-
-void CutLines(SDL_Surface *img)
-{
-  Uint32 pixel;
-  Uint8 r, g, b;
-  int w, h;
-  int end_line =0;
-  int begin_line=0;
-  w = img -> w;
-  h = img -> h;
-
-  for(int i = 0; i < h; i++)
- {
-     
-     for (int j = 0; j< w; j++)
-     {
-         pixel = getpixel(img,j,i);
-         SDL_GetRGB(pixel, img->format, &r, &g, &b);
-         
-         if (r == 0) /*after binerize is not necessary to test the others values */
-            {
-                if (FindBlackPixel(img,i-1))/*For the first black pixel we meet, we check if the upper line is full of white and then we draw a line for mark the begin of a new line*/
-                {
-                    DrawALine(img,i-1);
-                    begin_line=i-1;
-                }
-
-                if (FindBlackPixel(img, i+1)) /*same but for the under line*/
-                {
-                    DrawALine(img,i+1);
-                    end_line =i+1;
-                }
-
-                if (end_line && begin_line)
-                {
-                    CutColumn(img, begin_line,end_line);
-
-                    end_line=0;
-                    begin_line=0;
-                }
-                break;
-            }
-     }
- }
-}
-
-
-/*draw a line if necessary*/
-void DrawALine(SDL_Surface *img,int x) 
-{
-  Uint32 pixel;
-  int w;
-  int h;
-  w = img -> w;
-
-  for(int i = 0; i < w; i++)
- {
-     pixel = SDL_MapRGB(img->format, 255, 150, 255);
-     putpixel(img, i, x, pixel);
- }
-}
-
-
-void CutColumn(SDL_Surface * img, int begin_line, int end_line)
-{
-    Uint8 r, g, b;
-    Uint32 pixel;
-    int w = img -> w;
-    for (int i = 0; i < w ; i++)
-    {
-        for (int j = begin_line;j< end_line;j++)
-        {
-            pixel = getpixel(img,i,j);
-            SDL_GetRGB(pixel, img->format, &r, &g, &b);
-            if (r == 0) /*after binerize is not necessary to test the others values */
-            {
-                if (FindBlackPixelInColumn(img, begin_line,end_line,i-1))/*For the first black pixel we meet, we check if the upper line is full of white and then we draw a line for mark the begin of a new line*/
-                {
-                    DrawAColumn(img,i-1,begin_line,end_line);
-                    
-                }
-
-                if (FindBlackPixelInColumn(img, begin_line,end_line,i+1)) /*same but for the under line*/
-                {
-                    DrawAColumn(img,i+1,begin_line,end_line);
-                    
-                }
-                break;
-            }
-
-        }
-
-    }
-}
-
-
-int FindBlackPixelInColumn(SDL_Surface *img, int begin_line, int end_line, int start)
-{
-  Uint32 pixel;
-  int w;
-  int h;
-  Uint8 r, g, b;
-  int bool = 1; /*A boolean that memorize if the line contain black pixel or not*/
-
-  for(int i = begin_line; i < end_line; i++)
- {
-    pixel = getpixel(img,start,i);
-
-    SDL_GetRGB(pixel, img->format, &r, &g, &b);
-
-    if (r == 0)
-    {
-        bool = 0;
-        break;
-    }
- }
-
- return bool;
-}
-
-
-/*Draw a column between two lines and characters*/
-
-void DrawAColumn(SDL_Surface *img,int y, int x, int end_line)
-{
-    Uint32 pixel;
-    Uint32 pixel2;
-    Uint8 r, g, b;
-    
-  for(int i = x; i < end_line; i++)
- { 
-    SDL_GetRGB(pixel2, img->format, &r, &g, &b);
-
-    if (r == 255 && g == 150 && b == 255 )
-    {
-        break;
-    }
-    else
-    {
-        pixel = SDL_MapRGB(img->format, 255, 255, 0);
-        putpixel(img, y, i, pixel);
-    }
-    
- }
-}
-
-
-
-
-/*  Blocks cutting  */
+    // DECOUPAGE DES BLOCS
 
 
 // renvoie la moyenne d'espacement entre les pixels noir pour avoir une idee de l'espacement des blocs
@@ -230,7 +57,7 @@ int pixelSpacingVertical(SDL_Surface *img)
 }
 
 
-/*  RLSA algorithm  */
+// RLSA
 
 // remplis les espaces horizontaux entre deux blocs en noir
 void blockDetection_horizontal(SDL_Surface *img)
@@ -312,6 +139,70 @@ void blockDetection_vertical(SDL_Surface *img)
         else
         {
           countBlack = 0;
+        }
+      }
+    }
+  }
+}
+
+
+
+// Trace les lignes des blocs avec le RLSA
+void drawBlocksLines (SDL_Surface *img, SDL_Surface *imgRLSA)
+{
+  Uint32 pixel;
+  Uint32 pixelUp;
+  Uint32 pixelDown;
+  Uint32 pixelLeft;
+  Uint32 pixelRight;
+  Uint8 r;
+  Uint8 g;
+  Uint8 b;
+
+  for(int i = 0; i < img -> w; i++)
+  {
+    for(int j = 0; j < img -> h; j++)
+    {
+      pixel = getpixel(img, i, j);
+      SDL_GetRGB(pixel, img -> format, &r, &g, &b);
+      if (r == 255 && g == 255 && b == 255)    // si le pixel est noir, on regarde les pixels autour, si un d'eux est blanc alors
+      {                                        // notre pixel est en bordure de bloc donc on le rend bleu
+        pixelUp = getpixel(img, i, j-1);
+        SDL_GetRGB(pixelUp, img -> format, &r, &g, &b);
+        if (r == 0 && g == 0 && b == 0)    // pixel du haut
+        {
+          pixel = SDL_MapRGB(img -> format, 0, 0, 255);
+          putpixel(img, i, j, pixel);
+        }
+        else
+        {
+          pixelDown = getpixel(img, i, j+1);
+          SDL_GetRGB(pixelDown, img -> format, &r, &g, &b);
+          if(r == 0 && g == 0 && b == 0)    // pixel d'en bas
+          {
+            pixel = SDL_MapRGB(img -> format, 0, 0, 255);
+            putpixel(img, i, j, pixel);
+          }
+          else
+          {
+            pixelLeft = getpixel(img, i-1, j);
+            SDL_GetRGB(pixelLeft, img -> format, &r, &g, &b);
+            if(r == 0 && g == 0 && b == 0)    // pixel de gauche
+            {
+              pixel = SDL_MapRGB(img -> format, 0, 0, 255);
+              putpixel(img, i, j, pixel);
+            }
+            else
+            {
+              pixelRight = getpixel(img, i+1, j);
+              SDL_GetRGB(pixelRight, img -> format, &r, &g, &b);
+              if(r == 0 && g == 0 && b == 0)    // pixel de droite
+              {
+                pixel = SDL_MapRGB(img -> format, 0, 0, 255);
+                putpixel(img, i, j, pixel);
+              }
+            }
+          }
         }
       }
     }
