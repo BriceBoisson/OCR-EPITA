@@ -298,7 +298,7 @@ void blockDetection_vertical(SDL_Surface *img)
 // img c'est l'image qui va contenir des blocs remplis de noir
 // imgHor a subi bloc detection horizontal
 // imgver a subi bloc detection vertical
-void drawBlocks (SDL_Surface *img, SDL_Surface *imgHor, SDL_Surface *imgVer)
+void drawBlocksMulti (SDL_Surface *img, SDL_Surface *imgHor, SDL_Surface *imgVer)
 {
     Uint32 pixelHor;
     Uint32 pixelVer;
@@ -326,6 +326,35 @@ void drawBlocks (SDL_Surface *img, SDL_Surface *imgHor, SDL_Surface *imgVer)
     }
 }
 
+
+// drawBlocks mais que en mono colonne
+void drawBlocks (SDL_Surface *img, SDL_Surface *imgHor)
+{
+  Uint32 pixelHor;
+  Uint32 pixel;
+  Uint32 pixelLine;
+  Uint8 r;
+  Uint8 g;
+  Uint8 b;
+  int w;
+  for(int i = 1; i + 1 < img -> w; i++)
+  {
+    for(int j = 1; j + 1< img -> h; j++)
+    {
+      pixelHor = getpixel(imgHor, i, j);
+      SDL_GetRGB(pixelHor, imgHor -> format, &r, &g, &b);
+      if (r== 0 && g == 0 && b == 0)
+      {
+         w = img -> w;
+         for(int k = 0; k < w; k++)
+         {
+            pixelLine = SDL_MapRGB(img->format, 0, 0, 0);
+            putpixel(img, i, x, pixelLine);
+         }
+      }
+    }
+  }
+}
 
 // Trace les lignes des blocs avec le RLSA
 // img c'est l'image avec le texte et imgRLSA c'est l'image qui a subi blockDrawing
@@ -522,3 +551,5 @@ void cutword(SDL_Surface *img){
       DrawAColumn(img, pos, 0,img->h);
   }
 }
+
+
