@@ -108,7 +108,7 @@ Neural_Network Initialisation(int train){
     network.layers[1].cells[0].weights[0] = -6.3234;
     network.layers[1].cells[0].weights[1] = -6.3801;*/
 
-    network.layers[0].cells[0].biais = -3.0;
+    /*network.layers[0].cells[0].biais = -3.0;
     network.layers[0].cells[1].biais = 1.0;
     network.layers[1].cells[0].biais = -1.0;
     network.layers[0].cells[0].weights[0] = 1.0;
@@ -116,7 +116,27 @@ Neural_Network Initialisation(int train){
     network.layers[0].cells[1].weights[0] = -3.0;
     network.layers[0].cells[1].weights[1] = -2.0;
     network.layers[1].cells[0].weights[0] = 1.0;
-    network.layers[1].cells[0].weights[1] = 1.0;
+    network.layers[1].cells[0].weights[1] = 1.0;*/
+
+    /*network.layers[0].cells[0].biais = 0.757400;
+    network.layers[0].cells[1].biais = -0.718000;
+    network.layers[1].cells[0].biais = -0.117400;
+    network.layers[0].cells[0].weights[0] =  0.087400;
+    network.layers[0].cells[0].weights[1] = -0.594000;
+    network.layers[0].cells[1].weights[0] = 0.990800;
+    network.layers[0].cells[1].weights[1] = 0.946800;
+    network.layers[1].cells[0].weights[0] = -0.719400;
+    network.layers[1].cells[0].weights[1] = 0.764200;*/
+
+    network.layers[0].cells[0].biais = my_rand();
+    network.layers[0].cells[1].biais = my_rand();
+    network.layers[1].cells[0].biais = my_rand();
+    network.layers[0].cells[0].weights[0] = my_rand();
+    network.layers[0].cells[0].weights[1] = my_rand();
+    network.layers[0].cells[1].weights[0] = my_rand();
+    network.layers[0].cells[1].weights[1] = my_rand();
+    network.layers[1].cells[0].weights[0] = my_rand();
+    network.layers[1].cells[0].weights[1] = my_rand();
 
     /*if (train){
         for(int i = 0; i < network.nb_layers; i++){
@@ -176,7 +196,7 @@ Neural_Network ForwardPass(double entries[], Neural_Network network, int iterati
 
 Neural_Network BackwardPass(double expected[], double entries[][2], Neural_Network network, int iteration){
 
-
+            double delta = 1.0;
             //double F = network.layers[1].cells[0].;
             double g = network.layers[1].cells[0].output;
             double dg = g*(1-g);
@@ -186,10 +206,10 @@ Neural_Network BackwardPass(double expected[], double entries[][2], Neural_Netwo
                 network.layers[1].cells[0].derivate_weights[j][iteration] = dg * E;
                 //double oh = dg*E;
                 //printf("%f  %f  %f\n", dg, g, F);
-                network.layers[1].cells[0].gradiant_weights[j][iteration] = f * dg * E;
+                network.layers[1].cells[0].gradiant_weights[j][iteration] = delta * f * dg * E;
                 network.layers[1].cells[0].weights[j] += network.layers[1].cells[0].gradiant_weights[j][iteration];
             }
-            network.layers[1].cells[0].gradiant_biais[iteration] = dg * E;
+            network.layers[1].cells[0].gradiant_biais[iteration] = delta * dg * E;
             network.layers[1].cells[0].biais += network.layers[1].cells[0].gradiant_biais[iteration];
 
             for (int i = 0; i < network.layers[0].nb_cells; i++){
@@ -206,12 +226,12 @@ Neural_Network BackwardPass(double expected[], double entries[][2], Neural_Netwo
                 for (int j = 0; j < network.layers[0].cells[i].nb_weight; j++){
                     double f = entries[iteration][j];
                     //network.layers[0].cells[i].derivate_weights[j][iteration] = ((f * g_prime * weight_partial) / g);
-                    network.layers[0].cells[i].gradiant_weights[j][iteration] = network.layers[1].cells[0].weights[i] * f * dg * E;
+                    network.layers[0].cells[i].gradiant_weights[j][iteration] = delta * network.layers[1].cells[0].weights[i] * f * dg * E;
                     network.layers[0].cells[i].weights[j] += network.layers[0].cells[i].gradiant_weights[j][iteration];
                     //printf("%f  %f\n", dg, E);
                     //network.layers[0].cells[i].gradiant_weights[j][iteration] = 2.0 * ((f * (g * (1 - g)))) * (F - expected[iteration]);
                 }
-                network.layers[0].cells[i].gradiant_biais[iteration] = network.layers[1].cells[0].weights[i] * dg * E;
+                network.layers[0].cells[i].gradiant_biais[iteration] = delta * network.layers[1].cells[0].weights[i] * dg * E;
                 //printf("%f  %f\n", dg, E);
                 network.layers[0].cells[i].biais += network.layers[0].cells[i].gradiant_biais[iteration];
                 //network.layers[0].cells[i].gradiant_biais[iteration] = 2.0 * (g * (1 - g)) * (F - expected[iteration]);
@@ -273,6 +293,7 @@ int main(void){
     srand(time(NULL));
     //printf("%f\n",my_rand());
     Neural_Network network = Initialisation(1);
+    Neural_Network network2 = network;
     Neural_Network_Layer layer;
         for(int i = 0; i < network.nb_layers; i++){
             layer = network.layers[i];
@@ -309,6 +330,16 @@ int main(void){
                     }
                 }
             }*/
+        }
+        for(int i = 0; i < network2.nb_layers; i++){
+            layer = network2.layers[i];
+            for(int j = 0; j < layer.nb_cells; j++){
+                Neural_Network_Cell cell = layer.cells[j];
+                printf("biais layer: %d cell: %d  :  %f\n",i, j, cell.biais);
+                for (int k = 0; k < cell.nb_weight; k++){
+                    printf("poid layer: %d cell: %d number: %d  :  %f\n",i, j, k, cell.weights[k]);
+                }
+            }
         }
 
     return 0;
