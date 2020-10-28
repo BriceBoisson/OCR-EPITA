@@ -158,16 +158,22 @@ void drawBlocks (SDL_Surface *img, SDL_Surface *imgHor, SDL_Surface *imgVer)
     Uint8 r;
     Uint8 g;
     Uint8 b;
-    pixelHor = getpixel(imgHor, i, j);
-    SDL_GetRGB(pixelHor, imgHor -> format, &r, &g, &b);
-    if (r == 0 && g == 0 && b == 0)
+    for(int i = 1; i + 1 < img -> w; i++)
     {
-        pixelVer = getpixel(imgVer, i, j);
-        SDL_GetRGB(pixelVer, imgVer -> format, &r, &g, &b);
-        if (r==0 && g==0 && b==0)
+        for(int j = 1; j + 1< img -> h; j++)
         {
-            pixel = SDL_MapRGB(img -> format, 0, 0, 0);
-             putpixel(img, i, j, pixel);
+            pixelHor = getpixel(imgHor, i, j);
+            SDL_GetRGB(pixelHor, imgHor -> format, &r, &g, &b);
+            if (r == 0 && g == 0 && b == 0)
+            {
+                pixelVer = getpixel(imgVer, i, j);
+                SDL_GetRGB(pixelVer, imgVer -> format, &r, &g, &b);
+                if (r==0 && g==0 && b==0)
+                {
+                    pixel = SDL_MapRGB(img -> format, 0, 0, 0);
+                     putpixel(img, i, j, pixel);
+                }
+            }
         }
     }
 }
