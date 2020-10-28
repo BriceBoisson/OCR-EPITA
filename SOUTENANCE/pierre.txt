@@ -1,0 +1,409 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{OCR}
+\author{pierre.jacobe }
+\date{October 2020}
+
+\usepackage[francais]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{eurosym}
+\usepackage{color}
+\usepackage{soul}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{newcent}
+
+\lstset{
+language=c,
+basicstyle=\footnotesize\ttfamily,
+numbers=left,
+numberstyle=\tiny,
+numbersep=5pt,
+tabsize=2,
+extendedchars=true,
+breaklines=true,
+frame=b,
+stringstyle=\color{green}\ttfamily,
+showspaces=false,
+showtabs=false,
+xleftmargin=0pt,
+xrightmargin=0pt,
+columns=fullflexible,
+framexleftmargin=15pt,
+framexrightmargin=0pt,
+framexbottommargin=10pt,
+framextopmargin=15pt,
+commentstyle=\color{green},
+morecomment=[l]{//},
+morecomment=[s]{/*}{*/},
+showstringspaces=false,
+morekeywords={ abstract, event, new, struct,
+as, explicit, null, switch,
+base, extern, object, this,
+bool, false, operator, throw,
+break, finally, out, true,
+byte, fixed, override, try,
+case, float, params, typeof,
+catch, for, private, uint,
+char, foreach, protected, ulong,
+checked, goto, public, unchecked,
+class, if, readonly, unsafe,
+const, implicit, ref, ushort,
+continue, in, return, using,
+decimal, int, sbyte, virtual,
+default, interface, sealed, volatile,
+delegate, internal, short, void,
+do, is, sizeof, while,
+double, lock, stackalloc,
+else, long, static,
+enum, namespace, string},
+keywordstyle=\color{blue},
+identifierstyle=\color{black},
+backgroundcolor=\color{white},
+}
+
+\begin{document}
+
+\maketitle
+
+\subsection{Pierre}
+
+
+
+Etudiant de deuxième années à Epita, c'est avec joie que j'ai commencé avec mon groupe ce projet OCR en langage C. Passionné d'informatique depuis mon plus jeune age, il est toujours intéréssant pour moi de mettre en pratique tout ce que j'ai pu voir à travers des projets. Pour cette première soutenance je me suis attelé sur le traitement de l'image, c'est à dire le passage au noir et blanc et le passage en nuance de gris. Puis je me suis occupé en partie de le segmentation, notamment le découpage des caractères, des lignes et des mots. Et enfin j'ai commencé le post traitement de l'image, c'est à dire enlever le bruit, le redimensionnement des caractères si nécéssaire et j'ai terminé le renforcement des contrastes.
+
+\subsection{Pre-processing}
+Cette partie est nécéssaire au bon traitement de l'image, en effet il n'est pas concevable d'exploiter une image "brut", que cela soit pour la segmentation ou encore le réseau de neurones. Différents filtres doivent donc être appliqués sur l'image comme vous allez pouvoir le constater dans les sections qui suivent.
+
+\subsection{Segmentation}
+
+Pour que le réseau de neurones arrive à reconstituer le texte après reconnaissance des caractères, il est nécéssaire de marquer les différentes parties de ce dernier que cela soit les paragraphes, les lignes, les mots ou encore les caractères.
+
+\subsection{Pre-processing}
+\subsubsection{Cahier des charges}
+Le cahier des charges demandait la réalisation du pre-processing pour la première soutenance. Ceci a été realisé sans difficultés commme vous allez pouvoir le voir par la suite.
+\subsubsection{Binarisation}
+
+Pour le projet OCR il n'est pas nécéssaire de s'encombrer avec les pixels de couleurs d'une image. Pour cela, le principe de binarisation permet de n'avoir que des pixels blanc. Comme nous travaillons en RGB, cela donne $(255,255,255)$ pour un pixel blanc et $(0,0,0)$ pour un pixel noir. Plus simplement il ne nous reste plus que deux valeurs possibles d'où le nom "binarize".
+
+\begin{center}
+    \includegraphics[scale=0.1]{pixel.png}
+\end{center}
+
+Mais alors comment est réprésenté un pixel en RGB ? et bien simplement comme la synthèse additive de trois couleurs (donc red green blue) pouvant être codé chacun sur 1 octet ce qui nous fait au total $255*255*255 = 16 581 375$ couleurs possibles. Et donc pour cela on a crée une fonction qui vient récupérer ces trois valeurs RGB pour connaitre la couleur d'un pixel. Cette fonction est pratiquement la même que celle donnée dans le TP3 sur la SDL. La librairie SDL 2.0 nous est très utile dans ce projet pour gérer les images.\\
+
+Maintenant que cela a été expliqué revenons à la fonction binerize qui nous permet de passer l'image en noir et blanc, elle n'est pas très intéréssante en soit car assez simple : mais voici ce qu'elle fait : 
+
+\begin{lstlisting}
+void binerize(SDL_Surface *img)
+{
+  /* Variables */
+  Uint32 pixel;
+  Uint8 r;
+  Uint8 g;
+  Uint8 b;
+  int w = img -> w;
+  int h = img -> h;
+  
+ for(int i = 0; i < w; i++)
+ {
+   for(int j = 0; j < h; j++)
+   {
+         pixel = getpixel(img,i,j);
+         SDL_GetRGB(pixel, img->format, &r, &g, &b);
+         Uint32 average = (r+b+g) /3;
+    
+     if(average > 140)
+     {
+          r = 255;
+          g = 255;
+          b = 255;
+     }
+     else
+     {
+          r = 0;
+          g = 0;
+          b = 0;
+     }
+     pixel = SDL_MapRGB(img->format, r, g, b);
+     putpixel(img, i, j, pixel);
+   }
+ }
+}
+\end{lstlisting}
+
+Souvent le seuil de la moyenne est placé à 127 (la moitié entière de 255) or ici si l'on fait cela la binarization est un peu trop brutal (certain pixels utilent à l'information deviennent blanc). Et pour encore éviter cet effet indésiré, il est préférable de d'abord passer l'image en nuance de gris "grayscale".
+
+\newpage
+
+Toutefois, voici le résultat obtenu avant et après :
+\begin{figure}[h]
+ \begin{minipage}{0.55\linewidth}
+\includegraphics[scale=0.15]{locontrast_featured.jpg}
+\caption{avant}
+\end{minipage}\hfill
+\begin{minipage}{0.55\linewidth}
+\includegraphics[scale=0.15]{binerize.png}
+\caption{après}
+\end{minipage}
+ \end{figure}
+
+\subsubsection{Nuance de gris}
+
+Donc comme mentionné précédement, le passage en nuance de gris (ou greyscale) permet de mieux choisir les pixels utilent à la segmentation par la suite et d'éviter d'en perdre trop après la binarization. Toutefois cette fonction à déjà été réalisé dans le TP03, il n'est donc pas nécéssairement utile de la détailler ici, mais son fonctionnement réside dans le remplacement des trois couleurs RGB par une seul et même nuance avec un coefficient appliqué à chaques nuance de rouge, de vert et bleu.
+
+\subsubsection{Conclusion}
+
+Cette section est terminée. Elle nous est globalement indispensable pour cette soutenance et la suite.
+
+\subsection{Segmentation}
+
+La segmentation de l'image et donc du texte sur cette dernière, est nécéssaire au bon fonctionnement du futur réseau de neurones. Le but final étant d'envoyer les caractères un à un au réseau sous forme d'un tableau à deux dimensions de 0 et de 1.
+
+Un des éléments nécéssaire pour réaliser cela est de marquer notre image c'est à dire découper les différents blocks de textes, les lignes, les mots et enfin les caractères.
+
+\subsubsection{Cahier des charges}
+
+Nous sommes en accord avec le cahier des charges, en effet, la segmentation en block, lignes, mots et caractères est effectuée. Toutefois, de nombreuses voies d'amélioration sont possible si nous voulons réaliser les bonus, notamment la gestion du multicolonne durant le découpage de block mais encore le découpage de caractères manuscrit, et un découpage des caractères amélioré.
+
+\subsubsection{Segmentation des lignes}
+
+Pour marquer les lignes nous sommes partis sur un parcours en largeur de l'image, donc sur chaque ligne de l'image nous regardons si cette dernière contient un pixel noir et comparant à la ligne précédente, si cette dernière est entièrement blanche alors cela veut dire que l'on n'est sur une nouvelle ligne, on la marque donc sur l'image.\\
+
+Voici ci-dessous l'algorithme qui permet de faire cela, comme dit au-dessus, on parcourt l'image en largeur. La boucle i permet de se déplacer dans la hauteur et j dans la largeur, dès qu'un pixel noir est rencontré on regarde si la ligne juste au-dessus contient un pixel noir ou non et pareil pour la ligne du dessous.\\
+
+Si elle n'en contient pas, on appelle une fonction qui va marquer la ligne sur l'image. On peut alors découper les caractères à ce moment comme dans la fonction ci-dessous, en retenant à chaque fois les lignes marquées (grace à begin\_line et end\_line) ou alors on découpe les caractères au moment où l'on travail uniquement sur la ligne en question (dans une fonction qui s'occupe uniquement des lignes).
+
+
+\begin{lstlisting}
+  Uint32 pixel =0;
+  Uint8 r =0, g =0, b =0;
+  int w =img -> w, h =img -> h; /* widht and height of picture */
+  int end_line =0;
+  int begin_line=0;
+
+  for(int i = 0; i < h; i++)
+ {
+     for (int j = 0; j< w; j++)
+     {
+         pixel = getpixel(img,j,i);
+         SDL_GetRGB(pixel, img->format, &r, &g, &b);
+         
+         if (r == 0) /*after binerize is not necessary to test the others values */
+            {
+                if (!FindBlackPixel(img,i-1))
+                {
+                    DrawALine(img,i-1);
+                    begin_line=i-1;
+                }
+
+                if (!FindBlackPixel(img, i+1)) /*same but for the under line*/
+                {
+                    DrawALine(img,i+1);
+                    end_line =i+1;
+                }
+
+                if (end_line && begin_line)
+                {
+                    CutColumn(img, begin_line,end_line);
+
+                    end_line=0;
+                    begin_line=0;
+                }
+                break;
+            }
+     }
+ }
+\end{lstlisting}
+\vspace*{0.5cm}
+Une méthode avec un histogramme avait été envisagé, or elle n'etait pas forcement plus efficace pour le marquage des lignes mais nous reparlerons de l'histogramme dans le découpage des mots.
+
+
+\subsubsection{Segmentation des caractères}
+
+Pour cette soutenance la segmentation des caractères se fait sur toute l'image comme vous allez le voir dans l'image qui suit, mais dans la logique de notre algorithme final de segmentation, le découpage des caractères ne se fera uniquement sur une image qui est un mot. Ceci dit, cela n'a pas réellement d'importance pour notre algorithme.
+
+Cette algorithme, fonctionne sur le même modèle que celui pour les lignes sauf que cette fois ci nous parcourons l'image de manière vertical. Si nous rencontrons un pixel noir nous regardons si la colonne précédente est blanche (de la même manière pour la colonne d'après), cela marque la fin et le début d'un caractère. Toutefois ceci est perfectible notament pour l'écriture italique où des caractères peuvent facilement se superposer. 
+
+\vspace*{0.5cm}
+
+\begin{lstlisting}
+    Uint8 r, g, b;
+    Uint32 pixel;
+    int w = img -> w;
+    for (int i = 0; i < w ; i++)
+    {
+        for (int j = begin_line;j< end_line;j++)
+        {
+            pixel = getpixel(img,i,j);
+            SDL_GetRGB(pixel, img->format, &r, &g, &b);
+            if (r == 0) 
+            {
+                if (FindBlackPixelInColumn(img, begin_line,end_line,i-1))
+                {
+                    DrawAColumn(img,i-1,begin_line,end_line);
+                }
+
+                if (FindBlackPixelInColumn(img, begin_line,end_line,i+1))
+                {
+                    DrawAColumn(img,i+1,begin_line,end_line);
+                }
+                break;
+            }
+        }
+    }
+\end{lstlisting}
+
+\vspace*{0.5cm}
+
+Pour finir voici une image où le découpage des caractères et des lignes est combinés pour illustrer cela : 
+\begin{center}
+    \includegraphics[scale=0.3]{cutline2.png}
+\end{center}
+
+\subsubsection{Segmentation des mots}
+Pour notre OCR, il est important de marquer les mots pour reconstruire le texte à travers le réseau de neurones. Pour cela nous somme partis sur une méthode par histogramme. Nous avons introduit cette méthode dans la section de découpage de ligne, cette dernière peut être utilisée pour découper les lignes ou les caractères. Après différents essais, cette dernière ne nous a pas convaincue dans le cadre de cette première soutenance.\\
+
+Toutefois, cette méthode s'est montrée très efficace pour marquer les mots. En quoi consiste t-elle ? 
+Elle consiste à mettre dans un tableau de dimension $W$ la largeur de l'image, la somme des pixels noirs pour chaque colonnes :
+\begin{center}
+$\forall{i} \in [|0,W|],$ $histo[$ $i$ $]=\sum_{k=0 \ }^H x_{k}$ avec $x_{k} = 1 \iff x_{k} = Pixel$ $Noir$
+\end{center}
+
+$H$ étant la hauteur. Cela nous permet de déterminer si une colonne contient plus de pixel de premier plan (noir) que une autre. Grace à cela, nous pouvons dès maintenant déterminer les espaces séparant les mots qui ne seront qu'une suite consécutive de zero dans le tableau.\\
+
+Toutefois il faut définir une valeur "seuil" qui permet de dire si cette suite de zéro est la distance entre deux caractères ou deux mots.
+
+\newpage
+
+Pour ce faire, une première fonction appelée "maximun" parcours l'histrogramme fraichement crée, nous ne l'avons pas précisé mais bien entendu c'est l'histogramme d'une image binarisée.\\
+
+Dès qu'un zéro apparait elle compte le nombre de zéro consécutifs dans le tableau, une fois qu'un nombre différent que zéro apparait, elle compare la valeur maximun actuelle au nombre de zéro consécutifs actuel et l'actualise en conséquence.
+
+\vspace*{0.5cm}
+
+\begin{lstlisting}
+    int* histog=histo(img);
+    int max = 0;
+    int s =0;
+    for(int i = 0;i < img -> w;i++){
+        if (histog[i]==0){
+            s++;
+        }
+        else
+        {
+            if (s > max){
+                max = s;
+            }
+            s =0;
+        }
+    }
+    return max;
+\end{lstlisting}
+
+Nous avons une fonction plutôt similaire qui renvoit la moyenne de la "longueur" des zéro consécutifs dans le tableau.\\
+
+\vspace*{0.3cm}
+[0 ; 0 ; 0 ; 0 ; 0 ; 0 ; 0 ; 5 ; 6 ; 7 ; 7 ; 6 ; 0 ; 0 ; 3 ; 9 ; 9 ; 8 ; 8 ; 0 ; 0 ; 0 ; 0 ; 0 ; 0]
+\vspace*{0.3cm}
+
+Dans cet histogramme, la valeur maximun est 7 zéro consécutif et la moyenne est $\frac{6+7+2}{3} =5$, sur un si petit example la moyenne n'est pas très représentative, ce qui nous donne l'algorithme final de découpage des mots ci-dessous :\\
+
+On crée tout d'abord l'histogramme, on récupère la valeur moyenne et la valeur maximale. La variable "s" est la somme des zéro consécutifs, la variable "bool1" permet de savoir le début et la fin d'un mot et "pos" permet de retenir la colonne du début d'un mot.\\
+
+On peut voir que si la valeur à la position i de l'histogramme n'est pas un zéro, on regarde s'il la somme actuelle de zéro est supérieur au seuil "s >= max - average", on peut donc réinitialiser cette somme à 0, en attente d'une nouvelle suite.
+\newpage
+
+\begin{lstlisting}
+  int* histog=histo(img);
+  int max = Max(img);
+  int bool1 = 1;
+  int s =0;
+  int pos = 0;
+  int average = AverageHisto(histog);
+ 
+  for (int i = 0; i<img -> w; i++){
+   if (histog[i]==0){
+       if(bool1){
+           pos = i;
+           bool1 = 0;
+       }
+        s++;
+    }
+    else{
+        if (s >= max - average)
+        {
+            DrawAColumn(img, pos, 0,img->h);
+        }
+        bool1=1;
+        s =0;
+    }
+  } 
+\end{lstlisting}
+et donc voici le découpage final appliqué à un texte (une ligne) a qui subit le pre-processing de l'image.
+
+\begin{center}
+    \includegraphics[scale=0.3]{cutword2.png}
+\end{center}
+
+\subsection{Post-Traitement}
+
+\subsubsection{Introduction}
+Comme indiqué dans le cahier des charges, nous avons commencé cette partie pour cette soutenance et nous obtenons déjà quelques résultats convaincant.
+\subsubsection{renforcement des contrastes}
+
+Pour certain image de mauvaise qualité ou de faible luminosité, il peut être intéréssant d'appliquer un algorithme de renforcement de contraste.
+
+Le contraste est simplement la différence entre les parties claire et sombre d'une image, il existe différents algorithme qui permettent de corriger le contraste.\\ 
+
+Nous en avons choisi un qui permet de définir le renforcement. La fonction qui permet de faire cela prend en paramètre le renforcement à appliquer, celui-ci peut être négatif ou encore positif. Le cas négatif ne nous intéresse pas car il diminue le contraste de l'image. Notre renforcement sera choisi pour être appliqué à une image précédement passée en niveau de gris. Le facteur de correction du contraste à appliquer est donné par la formule suivante :\\
+
+\begin{center}
+    $factor = (259 * (delta + 255)) / (255.0 * (259.0 - delta))$
+\end{center}
+
+Delta étant ici le renforcement souhaité. Il ne reste plus qu'à l'appliquer à chacune des composantes RGB de l'image tout en s'assurant que les valeurs restent comprises entre 0 et 255.
+
+\begin{center}
+$r = Restrict256(factor * (r - 128) + 128);$\\
+$g = Restrict256(factor * (g - 128) + 128);$\\
+$b = Restrict256(factor * (b - 128) + 128);$\\
+\end{center}
+
+Le contraste a donc été diminué ou augmenté autour de la valeur pivot 128.
+
+\begin{figure}[h]
+ 	
+ \begin{minipage}{0.55\linewidth}
+\includegraphics[scale=0.15]{locontrast_featured.jpg}
+\caption{before contrast function}
+\end{minipage}\hfill
+\begin{minipage}{0.55\linewidth}
+\includegraphics[scale=0.15]{contrasted.png}
+\caption{after contrast function}
+\end{minipage}
+ \end{figure}
+ 
+ \subsubsection{Traitement du bruit}
+ 
+ Nous avons commencé un traitement du bruit et implementé une fonction qui ne nous convenait pas totalement. Celle-ci est le filtre médian, ce dernier consiste à partir d'un pixel de créer une matrice de tous ces voisin et de le remplacer par la valeur mediane de la matrice.\\
+ 
+ Prenons pour exemple, le pixel 111 ci-dessous et la matrice de ses pixels voisins :
+ 
+ \begin{center}
+     \includegraphics[scale=0.8]{matrice.png}
+ \end{center}
+ 
+ La valeur médiane de cette matrice est 7, on remplace 111 par 7. On applique cela sur chaque pixel de l'image.
+ 
+ \subsubsection{Conclusion}
+ 
+ Même si commencée cette partie est loin d'être fini, mais cela reste un bon début. Nous devons 
+ 
+
+\end{document}
