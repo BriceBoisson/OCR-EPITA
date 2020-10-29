@@ -486,6 +486,7 @@ int seuil(SDL_Surface *img)
         
     }
     printf("MAX : %i \n",max);
+    free(histog);
     return max;
 }
 
@@ -517,6 +518,7 @@ int average(SDL_Surface *img)
         
     }
     printf("AVERAGE : %i ", sum/r);
+    free(histog);
     return sum/r;
     
 }
@@ -561,6 +563,7 @@ void cutword(SDL_Surface *img){
   {
       DrawAColumn(img, pos, 0,img->h);
   }
+  free(histog);
 }
 
 
