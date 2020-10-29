@@ -428,7 +428,7 @@ int* histo(SDL_Surface *img)
   w = img -> w;
   int h;
   h = img -> h;
-  int histo = malloc(w * sizeof(int));
+  int *histo = malloc(w * sizeof(int));
 
   for(int r = 0;r< w;r++ )
   {
