@@ -1,5 +1,5 @@
-CC=gcc
-CFLAGS=-Wall -Werror -Wextra
+CC=gcc -fsanitize=address
+CFLAGS=-Wall -Werror -Wextra -O0 -g
 LDFLAGS= -lSDL2
 EXEC= ImageTreatment
 
@@ -9,7 +9,7 @@ all: $(EXEC)
 
 
 ImageTreatment: main.o segmentation.o cleanerimage.o tools.o display.o
-	$(CC) -o ImageTreatment main.o segmentation.o cleanerimage.o tools.o display.o $(LDFLAGS)
+	$(CC) -o ImageTreatment main.o segmentation.o cleanerimage.o tools.o display.o $(LDFLAGS) -MMD
 
 
 main.o: main.c

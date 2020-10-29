@@ -331,7 +331,6 @@ void drawBlocksMulti (SDL_Surface *img, SDL_Surface *imgHor, SDL_Surface *imgVer
 void drawBlocks (SDL_Surface *img, SDL_Surface *imgHor)
 {
   Uint32 pixelHor;
-  Uint32 pixel;
   Uint32 pixelLine;
   Uint8 r;
   Uint8 g;
@@ -349,7 +348,7 @@ void drawBlocks (SDL_Surface *img, SDL_Surface *imgHor)
          for(int k = 0; k < w; k++)
          {
             pixelLine = SDL_MapRGB(img->format, 0, 0, 0);
-            putpixel(img, i, x, pixelLine);
+            putpixel(img, k, j, pixelLine);
          }
       }
     }

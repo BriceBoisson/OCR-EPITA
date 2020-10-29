@@ -68,6 +68,45 @@ void binerize(SDL_Surface *img)
 
 }
 
+int Restrict256(int n)
+{
+  if (n < 0)
+    return 0;
+  if (n > 255)
+    return 255;
+  return n;
+}
+
+void ConstrastRenforcement(SDL_Surface* img,int delta)
+{
+  double factor = (259 * (delta + 255)) / (255.0 * (259.0 - delta));
+  Uint32 pixel;
+  Uint8 r;
+  Uint8 g;
+  Uint8 b;
+  int w = img -> w;
+  int h = img -> h;
+
+  if (delta == 259)
+  {
+    delta = 258;
+  }
+    
+    for (int i = 0; i < w;i++)
+    {
+        for(int j = 0; j< h; j++)
+        {
+            pixel = getpixel(img, i,j);
+            SDL_GetRGB(pixel, img->format, &r,&g,&b);
+            r = Restrict256(factor * (r - 128) + 128);
+            g = Restrict256(factor * (g- 128) + 128);
+            b = Restrict256(factor * (b - 128) + 128);
+            pixel = SDL_MapRGB(img -> format,r,g,b);
+            putpixel(img,i,j,pixel);
+        }
+    }
+}
+
 
 void noiseReduction(SDL_Surface *img)
 {

@@ -37,7 +37,6 @@ int main(int argc, char *argv[])
 
     wait_for_keypressed();
 
-    
 
     if (!loadedImage)
     {
@@ -49,6 +48,21 @@ int main(int argc, char *argv[])
         grayscale(loadedImage);
         display_img(loadedImage);
         wait_for_keypressed();
+        ConstrastRenforcement(loadedImage,100);
+        display_img(loadedImage);
+        wait_for_keypressed();
+    }
+
+    if (strcmp(argv[1], "contrast") == 0) {
+        ConstrastRenforcement(loadedImage,100);
+        display_img(loadedImage);
+        wait_for_keypressed();
+    }
+
+    if (strcmp(argv[1], "removenoise") == 0) {
+        noiseReduction(loadedImage);
+        display_img(loadedImage);
+        wait_for_keypressed();
     }
 
     if (strcmp(argv[1], "CutCharactere") == 0) {
@@ -57,8 +71,20 @@ int main(int argc, char *argv[])
         wait_for_keypressed();
     }
 
-      if (strcmp(argv[1], "RLSAv") == 0) {
-        blockDetection_vertical(loadedImage);
+      if (strcmp(argv[1], "block") == 0) {
+        grayscale(loadedImage);
+        display_img(loadedImage);
+        wait_for_keypressed();
+        binerize(loadedImage);
+        display_img(loadedImage);
+        wait_for_keypressed();
+        SDL_Surface *imagev = copy_image(loadedImage);
+        SDL_Surface *imagerlsa = copy_image(loadedImage);
+        blockDetection_vertical(imagev);
+        wait_for_keypressed();
+        drawBlocks(imagerlsa,imagev);
+        display_img(imagerlsa);
+        drawBlocksLines(loadedImage, imagerlsa);
         display_img(loadedImage);
         wait_for_keypressed();
     }
@@ -75,6 +101,7 @@ int main(int argc, char *argv[])
         wait_for_keypressed();
     }
        if (strcmp(argv[1], "C") == 0) {
+        loadedImage=resize(loadedImage,1218,41);
         grayscale(loadedImage);
         display_img(loadedImage);
         wait_for_keypressed();

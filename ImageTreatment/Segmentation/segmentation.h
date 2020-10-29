@@ -11,7 +11,15 @@ void cutword(SDL_Surface *img);
 
 int seuil(SDL_Surface *img);
 
+void drawBlocksLines (SDL_Surface *img, SDL_Surface *imgRLSA);
+
+
 int* histo(SDL_Surface *img);
+
+void drawBlocksMulti(SDL_Surface *img, SDL_Surface *imgHor, SDL_Surface *imgVer);
+
+
+void drawBlocks(SDL_Surface *img, SDL_Surface *imgHor);
 
 void cutchar(SDL_Surface *img);
 
@@ -20,6 +28,8 @@ int pixelSpacingHorizontal(SDL_Surface *img);
 int pixelSpacingVertical(SDL_Surface *img);
 
 void blockDetection_horizontal(SDL_Surface *img);
+
+int average(SDL_Surface *img);
 
 void blockDetection_vertical(SDL_Surface *img);
 
