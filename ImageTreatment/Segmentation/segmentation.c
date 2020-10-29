@@ -447,10 +447,8 @@ int* histo(SDL_Surface *img)
     }
     histo[i]= h -s;
   }
-
-  int *re = histo;
-  free(histo);
-  return re;
+  
+  return histo;
 
 }
 
@@ -461,6 +459,7 @@ void cutchar(SDL_Surface *img){
       DrawAColumn(img, i, 0,img->h -1);
     }
   } 
+  free(histog);
 }
 
 int seuil(SDL_Surface *img)
@@ -483,6 +482,7 @@ int seuil(SDL_Surface *img)
         
     }
     printf("MAX : %i \n",max);
+    free(histog);
     return max;
 }
 
@@ -510,6 +510,7 @@ int average(SDL_Surface *img)
         }
         
     }
+    free(histog);
     printf("AVERAGE : %i ", sum/r);
     return sum/r;
     
@@ -552,6 +553,7 @@ void cutword(SDL_Surface *img){
   {
       DrawAColumn(img, pos, 0,img->h);
   }
+  free(histog);
 }
 
 
