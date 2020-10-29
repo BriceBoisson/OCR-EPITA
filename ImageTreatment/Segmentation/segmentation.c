@@ -428,7 +428,7 @@ int* histo(SDL_Surface *img)
   w = img -> w;
   int h;
   h = img -> h;
-  int* histo = malloc(w * sizeof(int));
+  int histo [img->w];
 
   for(int r = 0;r< w;r++ )
   {
@@ -482,7 +482,6 @@ int seuil(SDL_Surface *img)
         
     }
     printf("MAX : %i \n",max);
-    free(histog);
     return max;
 }
 
@@ -510,7 +509,6 @@ int average(SDL_Surface *img)
         }
         
     }
-    free(histog);
     printf("AVERAGE : %i ", sum/r);
     return sum/r;
     
@@ -553,7 +551,6 @@ void cutword(SDL_Surface *img){
   {
       DrawAColumn(img, pos, 0,img->h);
   }
-  free(histog);
 }
 
 
