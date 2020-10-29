@@ -80,6 +80,7 @@ int main(int argc, char *argv[])
         wait_for_keypressed();
         SDL_Surface *imagev = copy_image(loadedImage);
         SDL_Surface *imagerlsa = copy_image(loadedImage);
+       
         blockDetection_vertical(imagev);
         wait_for_keypressed();
         drawBlocks(imagerlsa,imagev);
@@ -87,6 +88,9 @@ int main(int argc, char *argv[])
         drawBlocksLines(loadedImage, imagerlsa);
         display_img(loadedImage);
         wait_for_keypressed();
+        SDL_FreeSurface(imagev);
+        SDL_FreeSurface(imagerlsa);
+
     }
 
      if (strcmp(argv[1], "binerize") == 0) {
