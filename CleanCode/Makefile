@@ -2,16 +2,16 @@ ALL = structure.c tools.c training.c traitement.c
 CFLAGS = -Wall -Werror -Wextra
 
 all : 
-	gcc $(CFLAGS) -std=c99 -o out $(ALL) main.c -lm
+	gcc $(CFLAGS) -std=c99 -o XOR $(ALL) main.c -lm
 
 testing :
-	gcc $(CFLAGS) -std=c99 -o out $(ALL) test.c -lm
+	gcc $(CFLAGS) -std=c99 -o XOR $(ALL) test.c -lm
 
 debugTest :
-	gcc $(CFLAGS) -g -std=c99 -o out $(ALL) test.c -lm
+	gcc $(CFLAGS) -g -std=c99 -o XOR $(ALL) test.c -lm
 
 debugMain :
-	gcc $(CFLAGS) -g -std=c99 -o out $(ALL) main.c -lm
+	gcc $(CFLAGS) -g -std=c99 -o XOR $(ALL) main.c -lm
 
 clean : 
-	rm -f *.o out
+	rm -f *.o XOR

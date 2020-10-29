@@ -40,11 +40,20 @@ Neural_Network training()
 void XOR(Neural_Network network)
 {
     double args[2] = {0.0, 0.0};
+    int quit = 1;
 
-    printf("XOR entries : ");
-    scanf("%lf %lf", &args[0], &args[1]);
-    network = ForwardPass(args, network);
-    printf("result : %f\n", network.output);
+    while(quit){
+    	printf("XOR entries : ");
+    	scanf("%lf %lf", &args[0], &args[1]);
+    	network = ForwardPass(args, network);
+    	printf("result : %f\n", network.output);
+	printf("Press any key to continue or q to quit ");
+	char q = 'a';
+	scanf(" %c", &q);
+	if (q == 'q'){
+		quit = 0;
+	}
+    }
 }
 
 Neural_Network try(Neural_Network network)
