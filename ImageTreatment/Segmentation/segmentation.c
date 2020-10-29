@@ -420,7 +420,7 @@ void drawBlocksLines (SDL_Surface *img, SDL_Surface *imgRLSA)
 }
 
 
-int* histo(SDL_Surface *img)
+void histo(SDL_Surface *img, int* histo1)
 {
   Uint32 pixel;
   Uint8 r, g, b;
@@ -428,11 +428,11 @@ int* histo(SDL_Surface *img)
   w = img -> w;
   int h;
   h = img -> h;
-  int *histo = malloc(w * sizeof(int));
+
 
   for(int r = 0;r< w;r++ )
   {
-      histo[r]=0;
+      histo1[r]=0;
   }
 
   for (int i = 0; i< w ; i ++) {
@@ -445,15 +445,16 @@ int* histo(SDL_Surface *img)
         s++; 
       }
     }
-    histo[i]= h -s;
+    histo1[i]= h -s;
   }
   
-  return histo;
-
 }
 
 void cutchar(SDL_Surface *img){
-  int* histog=histo(img);
+  int w;
+  w = img -> w;
+  int *histog = malloc(w * sizeof(int));
+  histo(img, histog);
   for (int i = 0; i < img -> w; i++){
     if (histog[i]==0 || histog[i]==1){
       DrawAColumn(img, i, 0,img->h -1);
@@ -464,7 +465,10 @@ void cutchar(SDL_Surface *img){
 
 int seuil(SDL_Surface *img)
 {
-    int* histog=histo(img);
+    int w;
+    w = img -> w;
+    int *histog = malloc(w * sizeof(int));
+    histo(img, histog);
     int max = 0;
     int s =0;
     for(int i = 0;i < img -> w;i++){
@@ -487,7 +491,10 @@ int seuil(SDL_Surface *img)
 
 int average(SDL_Surface *img)
 {
-    int* histog=histo(img);
+    int w;
+    w = img -> w;
+    int *histog = malloc(w * sizeof(int));
+    histo(img, histog);
     int s =0;
     int sum =0;
     int r = 0;
@@ -517,7 +524,10 @@ int average(SDL_Surface *img)
 void cutword(SDL_Surface *img){
 
     printf("W %i H %i",img -> w, img ->h);
-  int* histog=histo(img);
+  int w;
+  w = img -> w;
+  int *histog = malloc(w * sizeof(int));
+  histo(img, histog);
   int seuil1 = seuil(img);
   int bool1 = 1;
   int r = average(img);

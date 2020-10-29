@@ -13,11 +13,9 @@ int seuil(SDL_Surface *img);
 
 void drawBlocksLines (SDL_Surface *img, SDL_Surface *imgRLSA);
 
-
-int* histo(SDL_Surface *img);
+void histo(SDL_Surface *img, int* histo1);
 
 void drawBlocksMulti(SDL_Surface *img, SDL_Surface *imgHor, SDL_Surface *imgVer);
-
 
 void drawBlocks(SDL_Surface *img, SDL_Surface *imgHor);
 
@@ -44,7 +42,6 @@ int FindBlackPixel(SDL_Surface *img, int x);
 void DrawInImage(SDL_Surface *img);
 
 void DrawALine(SDL_Surface *img,int x);
-
 
 void lines(SDL_Surface* img);
 
