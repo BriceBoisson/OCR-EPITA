@@ -447,7 +447,10 @@ int* histo(SDL_Surface *img)
     }
     histo[i]= h -s;
   }
-  return histo;
+
+  int *re = histo;
+  free(histo);
+  return re;
 
 }
 
