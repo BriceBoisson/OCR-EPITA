@@ -2,6 +2,8 @@
 
 
 /*find if a line contain black pixel*/
+/*If contain a black pixel return 0*/
+/*x is the height*/
 int FindBlackPixel(SDL_Surface *img, int x)
 {
   Uint32 pixel;
@@ -27,7 +29,9 @@ int FindBlackPixel(SDL_Surface *img, int x)
  return bool;
 }
 
-void CutLines(SDL_Surface *img)
+/*Main function which print line on image*/
+
+void CutLines(SDL_Surface *img, int d)
 {
   Uint32 pixel;
   Uint8 r, g, b;
@@ -36,10 +40,10 @@ void CutLines(SDL_Surface *img)
   int begin_line=0;
   w = img -> w;
   h = img -> h;
+  d = d %2;
 
   for(int i = 0; i < h; i++)
  {
-     
      for (int j = 0; j< w; j++)
      {
          pixel = getpixel(img,j,i);
@@ -61,7 +65,10 @@ void CutLines(SDL_Surface *img)
 
                 if (end_line && begin_line)
                 {
+                  if (d)
+                  {
                     CutColumn(img, begin_line,end_line);
+                  }
 
                     end_line=0;
                     begin_line=0;
@@ -87,7 +94,7 @@ void DrawALine(SDL_Surface *img,int x)
  }
 }
 
-
+/*Main function for mark the column on the image*/
 void CutColumn(SDL_Surface * img, int begin_line, int end_line)
 {
     Uint8 r, g, b;
@@ -120,7 +127,10 @@ void CutColumn(SDL_Surface * img, int begin_line, int end_line)
     }
 }
 
-
+/*find if a column contain black pixel*/
+/*If contain a black pixel return 0*/
+/*start is the value on weight*/
+/*begin_line and end_line the value on height*/
 int FindBlackPixelInColumn(SDL_Surface *img, int begin_line, int end_line, int start)
 {
   Uint32 pixel;
@@ -419,7 +429,8 @@ void drawBlocksLines (SDL_Surface *img, SDL_Surface *imgRLSA)
   }
 }
 
-
+/*make an histogramme of the black pixel in column of the image*/
+/*histo1 is a pointer on a int array*/
 void histo(SDL_Surface *img, int* histo1)
 {
   Uint32 pixel;
@@ -449,7 +460,7 @@ void histo(SDL_Surface *img, int* histo1)
   }
   
 }
-
+/*useless actually*/
 void cutchar(SDL_Surface *img){
   int w;
   w = img -> w;
@@ -463,14 +474,16 @@ void cutchar(SDL_Surface *img){
   free(histog);
 }
 
+
+/*Return the max value of a suite of zero in the histogramme*/
 int seuil(SDL_Surface *img)
 {
-    int w;
-    w = img -> w;
+    int w= img -> w;
     int *histog = malloc(w * sizeof(int));
     histo(img, histog);
     int max = 0;
     int s =0;
+
     for(int i = 0;i < img -> w;i++){
         if (histog[i]==0){
             s++;
@@ -485,11 +498,13 @@ int seuil(SDL_Surface *img)
         }
         
     }
-    printf("MAX : %i \n",max);
     free(histog);
     return max;
 }
 
+
+
+/*make the average of all suite of zero in the histogramme*/
 int average(SDL_Surface *img)
 {
     int w;
@@ -517,17 +532,17 @@ int average(SDL_Surface *img)
         }
         
     }
-    printf("AVERAGE : %i ", sum/r);
     free(histog);
     return sum/r;
     
 }
 
+
+
+/*cut all of the word of a line*/
 void cutword(SDL_Surface *img){
 
-    printf("W %i H %i",img -> w, img ->h);
-  int w;
-  w = img -> w;
+  int w =img -> w;
   int *histog = malloc(w * sizeof(int));
   histo(img, histog);
   int seuil1 = seuil(img);
@@ -537,10 +552,8 @@ void cutword(SDL_Surface *img){
   int pos = 0;
   int i;
   
-  printf("SEUIL : %i\n",seuil1);
  
   for (i = 0; i<img -> w; i++){
-      //printf("%i \n",s);
    if (histog[i]==0){
        if(bool1){
            pos = i;

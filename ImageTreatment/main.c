@@ -10,33 +10,18 @@ int main(int argc, char *argv[])
 
     if (argc == 1)
     {
-        printf("Welcome to our Image treatment.\n The following command are avaible : \n -Grayscale \n -Binerize \n -CutCharactere \n -RLSAh \n -RLSAv \n");
+        printf("Welcome to our Image treatment.\n The following command are avaible :  \n -grayscale \n -binerize \n -cutchar \n -RLSAh \n -RLSAv \n -contrast \n -block \n");
         return 1;
     }
-
-    
     if (argc < 3) {
 		printf("Error, two arguments needed.\n");
 		return 1;
 	}
 
-
     SDL_Surface *loadedImage = 0;
     loadedImage = SDL_LoadBMP(argv[2]);
-
-    /*binerize(loadedImage);
-
-    int* r = histo(loadedImage);
-
-    for (int i = 0; i < loadedImage -> w; i++)
-    {
-        printf("%i \n", r[i]);
-    }*/
-
     display_img(loadedImage);
-
     wait_for_keypressed();
-
 
     if (!loadedImage)
     {
@@ -65,8 +50,26 @@ int main(int argc, char *argv[])
         wait_for_keypressed();
     }
 
-    if (strcmp(argv[1], "CutCharactere") == 0) {
-        CutLines(loadedImage);
+     if (strcmp(argv[1], "cutline") == 0) {
+        binerize(loadedImage);
+        display_img(loadedImage);
+        wait_for_keypressed();
+        grayscale(loadedImage);
+        display_img(loadedImage);
+        wait_for_keypressed();
+        CutLines(loadedImage, 0);
+        display_img(loadedImage);
+        wait_for_keypressed();
+    }
+
+    if (strcmp(argv[1], "cutcar") == 0) {
+        binerize(loadedImage);
+        display_img(loadedImage);
+        wait_for_keypressed();
+        grayscale(loadedImage);
+        display_img(loadedImage);
+        wait_for_keypressed();
+        CutLines(loadedImage, 1);
         display_img(loadedImage);
         wait_for_keypressed();
     }
@@ -117,9 +120,7 @@ int main(int argc, char *argv[])
         wait_for_keypressed();
     }
 
-
     SDL_SaveBMP(loadedImage,"src/final12.bmp");
-
     SDL_FreeSurface(loadedImage);
 
     return 0;

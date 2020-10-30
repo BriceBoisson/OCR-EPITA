@@ -5,7 +5,7 @@
 # include "../Tools/tools.h"
 # include <SDL2/SDL.h>
 
-void CutLines(SDL_Surface *img);
+void CutLines(SDL_Surface *img, int d);
 
 void cutword(SDL_Surface *img);
 
