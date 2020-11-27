@@ -1,0 +1,40 @@
+Bienvenue dans le projet du group OCReparti pour 15 jours (OCReconfiné).
+
+Vous découvrirez ci-dessous comment compiler et executer nos programmes.
+
+
+En ce qui concerne la partie de la segmentation et traitement de l'image :
+
+Il vous suffit de vous rendre dans le dossier ImageTreatement, la compilation du projet se fait simplement avec la commande "make"
+
+Ensuite pour executer le projet il vous suffit de faire : ./ImageTreatment "le path de l'image" commande 
+
+Les différentes commandes disponibles sont les suivantes :
+
+- grayscale 
+- binerize 
+- cutchar (découpe les caractères et les lignes)
+- RLSAh 
+- RLSAv 
+- contrast 
+- block (découpe les blocks)
+
+L'image d'origine apparait alors à l'écran, appuyez alors sur n'importe quelles touches pour voir les traitements s'appliquer.
+
+
+Pour la partie réseau de neurone et implémentation du XOR :
+
+Il vous suffit de vous rendre dans le dossier Neural-Network, la compilation du projet se fait simplement avec la commande "make"
+
+Ensuite pour exécuter le projet il vous suffit de faire : ./XOR
+
+Il faut ensuite attendre que le réseau de neurone se calcul, puis vous pourrez entrez des valeurs pour le tester.
+
+Valeurs de test :
+- 0 0
+- 1 0
+- 0 1
+- 1 1
+
+Le résultat de sortie du réseau s’affiche dans le terminal.
+Vous pouvez ensuite soit continuer à effectuer des tests en appuyant sur une touche quelconque, soit appuyer sur q pour quitter le programme.
