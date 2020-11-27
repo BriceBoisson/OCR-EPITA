@@ -1,4 +1,4 @@
-CC=gcc -fsanitize=address
+CC=gcc 
 CFLAGS=-Wall -Werror -Wextra -O0 
 LDFLAGS= -lSDL2
 EXEC= ImageTreatment
