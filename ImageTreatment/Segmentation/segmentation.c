@@ -457,6 +457,7 @@ void histo(SDL_Surface *img, int* histo1)
       }
     }
     histo1[i]= h -s;
+    printf("%i ",histo1[i]);
   }
   
 }
@@ -465,10 +466,27 @@ void cutchar(SDL_Surface *img){
   int w;
   w = img -> w;
   int *histog = malloc(w * sizeof(int));
+  int average = average1(img);
+  printf("%i\n",average);
+  int s = 0;
+  int bool1=0;
   histo(img, histog);
   for (int i = 0; i < img -> w; i++){
-    if (histog[i]==0 || histog[i]==1){
-      DrawAColumn(img, i, 0,img->h -1);
+    if (s > average){
+      printf("histo(%i) = %i",i,histog[i]);
+      DrawAColumn(img, i-s/2, 0,img->h -1); 
+    }
+    if (histog[i] != 0){
+        if(bool1)
+        {
+          bool1 =0;
+        }
+      s++;
+    }
+    else
+    {
+      bool1=1;
+      s =0;
     }
   } 
   free(histog);
@@ -517,6 +535,38 @@ int average(SDL_Surface *img)
     int bool1 =1;
     for(int i = 0;i < img -> w;i++){
         if (histog[i]==0){
+            if(bool1)
+            {
+                bool1 =0;
+                r+=1;
+            }
+            s++;
+        }
+        else
+        {
+            sum+=s;
+            bool1=1;
+            s =0;
+        }
+        
+    }
+    free(histog);
+    return sum/r;
+    
+}
+
+int average1(SDL_Surface *img)
+{
+    int w;
+    w = img -> w;
+    int *histog = malloc(w * sizeof(int));
+    histo(img, histog);
+    int s =0;
+    int sum =0;
+    int r = 0;
+    int bool1 =1;
+    for(int i = 0;i < img -> w;i++){
+        if (histog[i] != 0){
             if(bool1)
             {
                 bool1 =0;

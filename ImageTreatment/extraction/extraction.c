@@ -1,4 +1,5 @@
 #include "extraction.h"
+#include "extractchar.h"
 #include "../display.h"
 
 int countlinepar(SDL_Surface* img)
@@ -127,6 +128,8 @@ void extractline(SDL_Surface *img, int x, int y)
     wait_for_keypressed();
 
     SDL_SaveBMP(new,"final13.bmp");
+
+    __extractword(new);
 }
 
 void __extractline(SDL_Surface *img)

@@ -15,6 +15,8 @@ void drawBlocksLines (SDL_Surface *img, SDL_Surface *imgRLSA);
 
 void histo(SDL_Surface *img, int* histo1);
 
+int average1(SDL_Surface *img);
+
 void drawBlocksMulti(SDL_Surface *img, SDL_Surface *imgHor, SDL_Surface *imgVer);
 
 void drawBlocks(SDL_Surface *img, SDL_Surface *imgHor);

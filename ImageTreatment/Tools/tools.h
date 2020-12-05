@@ -18,6 +18,12 @@ SDL_Surface * resizechar(SDL_Surface* img);
 
 int FindBlackPixelv2(SDL_Surface *img, int x);
 
+SDL_Surface* rotate(double teta, SDL_Surface* img);
+
+double houghtrasformy(SDL_Surface *img);
+
+double maxhough(int *tab, size_t maxrow);
+
 SDL_Surface* copy_image(SDL_Surface *img);
 
 SDL_Surface* resize(SDL_Surface *img, int x,int y);

@@ -1,6 +1,7 @@
 #include "Filter/cleanerimage.h"
 #include "Segmentation/segmentation.h"
 #include "extraction/extraction.h"
+#include "extraction/extractchar.h"
 #include <string.h>
 #include "display.h"
 #include "SDL2/SDL_image.h"
@@ -60,8 +61,32 @@ int main(int argc, char *argv[])
     }
 
     if (strcmp(argv[1], "removenoise") == 0) {
+        //binerize(loadedImage);
         noiseReduction(loadedImage);
         display_img(loadedImage);
+        wait_for_keypressed();
+    }
+
+     if (strcmp(argv[1], "rotate") == 0) {
+        grayscale(loadedImage);
+        display_img(loadedImage);
+        wait_for_keypressed();
+        binerize(loadedImage);
+        display_img(loadedImage);
+        wait_for_keypressed();
+        double teta = houghtrasformy(loadedImage);
+
+        if (teta > 90)
+        {
+            teta+=90;
+        }
+        else
+        {
+            teta-=90;
+        }
+        
+        
+        display_img(rotate(teta,loadedImage));
         wait_for_keypressed();
     }
 
@@ -85,6 +110,15 @@ int main(int argc, char *argv[])
         display_img(loadedImage);
         wait_for_keypressed();
         CutLines(loadedImage, 1);
+        display_img(loadedImage);
+        wait_for_keypressed();
+    }
+
+       if (strcmp(argv[1], "cutcar2") == 0) {
+        binerize(loadedImage);
+        display_img(loadedImage);
+        wait_for_keypressed();
+        cutchar(loadedImage);
         display_img(loadedImage);
         wait_for_keypressed();
     }
@@ -122,6 +156,17 @@ int main(int argc, char *argv[])
         display_img(loadedImage);
         wait_for_keypressed();
     }
+
+    if (strcmp(argv[1], "RLSAv") == 0) {
+        blockDetection_vertical(loadedImage);
+        display_img(loadedImage);
+        wait_for_keypressed();
+    }
+    if (strcmp(argv[1], "cutword2") == 0) {
+        binerize(loadedImage);
+        __extractchar(loadedImage);
+
+    }
        if (strcmp(argv[1], "C") == 0) {
         loadedImage=resize(loadedImage,1218,41);
         grayscale(loadedImage);
@@ -135,7 +180,7 @@ int main(int argc, char *argv[])
         wait_for_keypressed();
     }
 
-    SDL_SaveBMP(resizechar(loadedImage),"src/resize.bmp");
+    SDL_SaveBMP(loadedImage,"src/resize.bmp");
     SDL_FreeSurface(loadedImage);
 
     return 0;

@@ -1,5 +1,7 @@
 # include "tools.h"
 
+#include <math.h>
+
 Uint8* pixelref(SDL_Surface *surf, unsigned x, unsigned y)
 {
  int bpp = surf -> format -> BytesPerPixel;
@@ -28,10 +30,9 @@ Uint32 getpixel(SDL_Surface *surface, unsigned x, unsigned y)
 
 void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 {
-    int nbOctetsParPixel = surface->format->BytesPerPixel;
-    Uint8 *p = (Uint8 *)surface->pixels + y *surface->pitch+x*nbOctetsParPixel;
+    Uint8 *p = pixelref(surface, x, y);
 
-    switch(nbOctetsParPixel)
+    switch(surface -> format -> BytesPerPixel)
     {
         case 1:
             *p = pixel;
@@ -67,7 +68,7 @@ void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 
 
 
-void pause()
+void pause1()
 {
     int continuer = 1;
     SDL_Event event;
@@ -92,6 +93,7 @@ void array_swap(int array[], size_t i, size_t j)
 }
 void array_select_sort(int array[], size_t len)
 {
+
   size_t i = 0;
   size_t j;
   int min_index;
@@ -135,7 +137,7 @@ SDL_Surface* copy_image(SDL_Surface *img)
 SDL_Surface* resize(SDL_Surface *img, int x, int y)
 {
     Uint32 pixel;
-     SDL_Surface* new = SDL_CreateRGBSurface(0,
+    SDL_Surface* new = SDL_CreateRGBSurface(0,
                               x,
                               y,
                               img -> format -> BitsPerPixel,0,0,0,0);
@@ -172,7 +174,7 @@ SDL_Surface* CreateWhiteSurface(int x, int y, SDL_Surface* img)
         }
     }
 
-    return new;
+    return (new);
 
 }
 
@@ -208,6 +210,7 @@ SDL_Surface * resizechar(SDL_Surface* img)
     int start = 0;
     int end  = 0;
     int booleen = 0;
+    Uint8 r, g, b;
     SDL_Surface *loadedImage = 0;
     loadedImage = SDL_LoadBMP("final12.bmp");
 
@@ -236,7 +239,7 @@ SDL_Surface * resizechar(SDL_Surface* img)
 
     printf("end : %i, begin : %i \n",end,start);
 
-    SDL_Surface *new = CreateWhiteSurface(img->w+20, end-start,loadedImage);
+    SDL_Surface *new = CreateWhiteSurface(img->w+21, end-start,loadedImage);
 
     for (int k = start; k < end; k++)
     {
@@ -248,10 +251,129 @@ SDL_Surface * resizechar(SDL_Surface* img)
         }
     }
 
+      for (int c = 0 ; c < end -start ; c++)
+    {
+        for (int t = 0 ; t < img->w+21 ; t ++)
+        {
+            pixel = getpixel(new,t,c);
+            SDL_GetRGB(pixel, new->format, &r, &g, &b);
+            if (r == 0 && g ==0 && b == 0)
+            {
+                
+                printf("%i ",1);
+            }
+            else
+            {
+                
+                printf("%i ",0);
+                
+            }
+            
+        }
+        printf("\n");
+    }
+
 
     return resize(new,32,32);
 
 }
 
+SDL_Surface* rotate(double teta, SDL_Surface* img)
+{
+    double radian = (teta * M_PI) / 180.0;
+    int certerx = round(((img->w+1)/2)-1);
+    int centery = round(((img->h+1)/2)-1);
+    int xprime;
+    int yprime;
+    Uint32 pixel = 0;
+    SDL_Surface * new = CreateWhiteSurface(img->w,img->h,img);
 
+    for (int i = 0; i < img -> w; i++)
+    {
+        for(int j = 0; j < img -> h ; j++)
+        {
+            xprime = round((double)(i-certerx)*cos(radian)+
+                            (double)(j-centery)*sin(radian));
+            yprime = round((double)(j-centery)*cos(radian) -  
+                            (double)(i-certerx)*sin(radian));
+                            
+            xprime += certerx;
+            yprime +=centery;
+
+            if (xprime >= 0 && xprime < img->w && yprime < img->h && yprime >= 0)
+            {
+                pixel = getpixel(img,i,j);
+                putpixel(new,xprime,yprime,pixel);
+            }
+        }
+
+       
+        
+    }
+
+    return new;
+    
+}
+
+double houghtrasformy(SDL_Surface *img)
+{
+    double maxrow = sqrt((img->w*img->w)+(img->h*img->h));
+    int maxteta = 180;
+    Uint8 r,g,b;
+    int *tab = calloc((size_t)(maxrow*181),sizeof(int));
+    Uint32 pixel = 0;
+
+    for (int i = 0; i < img->w; i++)
+    {
+        for(int j = 0; j < img->h;  j++)
+        {
+            pixel = getpixel(img,i,j);
+            SDL_GetRGB(pixel, img->format, &r, &g, &b);
+
+            if (r == 0 && g == 0 && b == 0)
+            {
+                int x = i - (img->w / 2);
+                int y = j - (img->h / 2);
+
+                for(int  teta_i = 0; teta_i < maxteta; teta_i++)
+                {
+                    double teta = ((double)teta_i /180.0)*M_PI;
+                    double row = x * cos(teta) + y * sin(teta);
+                    size_t i_rho = 0.5 + (row / maxrow + 0.5) * (maxrow+1);
+                    tab[teta_i+maxteta*i_rho]+=1;
+                }
+            }
+            
+        }
+    }
+
+    double resulte = maxhough(tab,maxrow);
+    //double tetadsd = (resulte * M_PI) / 180.0;
+
+    printf("%fd\n",resulte);
+    //free(tab);
+
+    return resulte;
+
+    
+}
+
+double maxhough(int *tab, size_t maxrow)
+{
+    
+    double ThetaR;
+    int max = 0;
+    size_t maxteta = 180;
+    for (size_t i = 0; i < maxrow; ++i) {
+        for (size_t j = 0; j < maxteta; ++j) {
+            if (tab[j + i * maxteta] > max) {
+                printf("%i j = %zu  ",tab[i + j * maxteta],j);
+                max = tab[j + i * maxteta];
+                ThetaR = j;
+            }
+        }
+        printf("\n");
+    }
+    return ThetaR;
+}
 

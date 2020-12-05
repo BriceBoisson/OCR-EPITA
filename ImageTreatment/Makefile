@@ -8,8 +8,8 @@ EXEC= ImageTreatment
 all: $(EXEC)
 
 
-ImageTreatment: main.o segmentation.o cleanerimage.o tools.o display.o extraction.o 
-	$(CC) -o ImageTreatment main.o segmentation.o cleanerimage.o tools.o display.o extraction.o $(LDFLAGS) -MMD
+ImageTreatment: main.o segmentation.o cleanerimage.o tools.o display.o extraction.o extractchar.o 
+	$(CC) -o ImageTreatment main.o segmentation.o cleanerimage.o tools.o display.o extraction.o extractchar.o $(LDFLAGS) -MMD
 
 
 main.o: main.c
@@ -29,6 +29,9 @@ display.o: display.c
 
 extraction.o: extraction/extraction.c
 	$(CC) -o extraction.o -c extraction/extraction.c $(CFLAGS)
+
+extractchar.o: extraction/extractchar.c
+	$(CC) -o extractchar.o -c extraction/extractchar.c $(CFLAGS) 
 
 clean:
 	rm -rf *.o
