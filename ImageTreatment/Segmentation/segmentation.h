@@ -13,6 +13,10 @@ int seuil(SDL_Surface *img);
 
 void drawBlocksLines (SDL_Surface *img, SDL_Surface *imgRLSA);
 
+void blockDetection_horizontalv2(SDL_Surface *img);
+
+int pixelSpacingHorizontalv2(SDL_Surface *img);
+
 void histo(SDL_Surface *img, int* histo1);
 
 int average1(SDL_Surface *img);

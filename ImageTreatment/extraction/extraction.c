@@ -1,6 +1,7 @@
 #include "extraction.h"
 #include "extractchar.h"
 #include "../display.h"
+#include "../Segmentation/segmentation.h"
 
 int countlinepar(SDL_Surface* img)
 {
@@ -123,6 +124,7 @@ void extractline(SDL_Surface *img, int x, int y)
         }
         
     }
+    //blockDetection_horizontalv2(new);
     display_img(new);
 
     wait_for_keypressed();

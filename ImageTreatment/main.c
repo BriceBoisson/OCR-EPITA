@@ -152,7 +152,8 @@ int main(int argc, char *argv[])
     }
 
        if (strcmp(argv[1], "RLSAh") == 0) {
-        blockDetection_horizontal(loadedImage);
+        binerize(loadedImage);
+        blockDetection_horizontalv2(loadedImage);
         display_img(loadedImage);
         wait_for_keypressed();
     }

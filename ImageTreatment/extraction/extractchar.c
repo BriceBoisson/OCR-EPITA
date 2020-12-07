@@ -60,37 +60,25 @@ void extractword(SDL_Surface* img,int x, int y)
 
 
     SDL_SaveBMP(new,"final12.bmp");
-    display_img(new);
+    //display_img(new);
 
-    wait_for_keypressed();
+    //wait_for_keypressed();
     __extractchar(new);
     SDL_FreeSurface(new);
 }
 
 void __extractword(SDL_Surface* img)
 {
-     
-   SDL_Surface* loadedImage=resize(img,1218,41);
+    SDL_Surface* loadedImage=resize(img,1218,41);
     display_img(loadedImage);
-
     wait_for_keypressed();
-
     cutword(loadedImage);
-
     display_img(loadedImage);
-
     wait_for_keypressed();
-
-
-
     int count = countwc(loadedImage);
-
     printf("count word : %i\n", count);
-
    // printf("count : %i\n", count);
-
     int *tab = malloc(sizeof(int)*count);
-
     ReturnPoswc(loadedImage, tab);
 
     for (int i = 0; i < count-1; i+=1)
@@ -119,9 +107,9 @@ void extractchar(SDL_Surface* img,int x, int y)
     }
 
     SDL_SaveBMP(new,"final12.bmp");
-    display_img(new);
+    //display_img(new);
 
-    wait_for_keypressed();
+   //wait_for_keypressed();
     //s__extractline(new);
     SDL_FreeSurface(new);
 }
@@ -129,15 +117,15 @@ void extractchar(SDL_Surface* img,int x, int y)
 void __extractchar(SDL_Surface* img)
 {
    SDL_Surface* loadedImage=copy_image(img);
-    display_img(loadedImage);
+    //display_img(loadedImage);
 
-    wait_for_keypressed();
+   // wait_for_keypressed();
 
     CutColumn(loadedImage,0,img->h);
 
-    display_img(loadedImage);
+    //display_img(loadedImage);
 
-    wait_for_keypressed();
+    //wait_for_keypressed();
 
 
 
@@ -149,7 +137,7 @@ void __extractchar(SDL_Surface* img)
 
     ReturnPoswc(loadedImage, tab);
 
-    for (int i = 0; i < count; i+=2)
+    for (int i = 0; i < count-1; i+=2)
     {
         printf("coord char : %i, %i\n", tab[i],tab[i+1]);
         extractchar(loadedImage, tab[i], tab[i+1]);       
