@@ -151,12 +151,12 @@ int main(int argc, char *argv[])
         wait_for_keypressed();
     }
 
-       if (strcmp(argv[1], "RLSAh") == 0) {
+       /*if (strcmp(argv[1], "RLSAh") == 0) {
         binerize(loadedImage);
         blockDetection_horizontalv2(loadedImage);
         display_img(loadedImage);
         wait_for_keypressed();
-    }
+    }*/
 
     if (strcmp(argv[1], "RLSAv") == 0) {
         blockDetection_vertical(loadedImage);

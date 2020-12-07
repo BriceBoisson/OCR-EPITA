@@ -114,11 +114,11 @@ void CutColumn(SDL_Surface * img, int begin_line, int end_line)
                     
                 }
 
-                /*if (FindBlackPixelInColumn(img, begin_line,end_line,i+1)) /*same but for the under line*/
+                if (FindBlackPixelInColumn(img, begin_line,end_line,i+1)) /*same but for the under line*/
                 {
                     DrawAColumn(img,i+1,begin_line,end_line);
                     
-                }*/
+                }
                 break;
             }
 
@@ -168,30 +168,6 @@ void DrawAColumn(SDL_Surface *img,int y, int x, int end_line)
  }
 }
 
-int pixelSpacingHorizontalv2(SDL_Surface *img)
-{
-  Uint32 pixel;
-  Uint8 r;
-  Uint8 g;
-  Uint8 b;
-  int white = 0;
-  int black = 0;
-
-  for(int i = 0; i < img -> h; i++)
-  {
-    for(int j = 0; j < img -> w; j++)
-    {
-      pixel = getpixel(img, j, i);
-      SDL_GetRGB(pixel, img -> format, &r, &g, &b);    // recup les r g b du pixel en cours (j, i) car on est en horizontal
-      if(r == 255 && g == 255 && b == 255)    // incremente white ou black selon qu'il est noir ou blanc
-      {white++;}
-      else
-      {black++;}
-    }
-
-  }
-  return (white) / (black);    // renvoie la moyenne ( nombre de blanc / (nombre de noirs / 2)  )
-}
 
 int pixelSpacingHorizontal(SDL_Surface *img)
 {
@@ -243,47 +219,7 @@ int pixelSpacingVertical(SDL_Surface *img)
   return(white) / (black );    //pareil qu'en horizontal
 }
 
-void blockDetection_horizontalv2(SDL_Surface *img)
-{ 
-  Uint32 pixel;
-  Uint8 r;
-  Uint8 g;
-  Uint8 b;
-  //int hori = pixelSpacingHorizontalv2(img)*3;    // c'est une moyenne de l'espacement, pour avoir un seuil adapté a l'image et pas reunir deux blocs entre eux par erreur
-  int countWhite;
 
-  for(int i = 0; i < img -> h; i++)
-  {
-    countWhite = 0;
-    for(int j = 0; j < img -> w; j++)
-    {
-      pixel = getpixel(img, j, i);
-      SDL_GetRGB(pixel, img -> format, &r, &g, &b);    // on recup le rgb de (j, i) car horitzontal
-      if(r == 255 && g == 255 && b == 255)    // on ajoute un blanc au compteur si le pixel est blanc
-      {
-        countWhite++;
-      }
-      if(r == 0 && g == 0 && b == 0)    // sinon on compare le nombre de pixels blancs entre les deux pixels noirs avec hori
-      {
-        if(countWhite <= 8)    // si c'est inferieur on rempli l'espace de noir pour creer le bloc
-        {
-            int k = j - 1;
-            while(countWhite > 0)
-            {
-              pixel = SDL_MapRGB(img -> format, 0, 0, 0);
-              putpixel(img, k, i, pixel);
-              countWhite--;
-              k--;
-            }
-        }
-        else    // sinon on a deux blocs separes donc il ne faut pas remplir l'espace
-        {
-          countWhite = 0;
-        }
-      }
-    }
-  }
-}
 
 
 void blockDetection_horizontal(SDL_Surface *img)
@@ -567,7 +503,7 @@ int seuil(SDL_Surface *img)
     int w= img -> w;
     int *histog = malloc(w * sizeof(int));
     histo(img, histog);
-    int max = histog[0];
+    int max = 10000000;
     int s =0;
 
     for(int i = 0;i < img -> w;i++){
@@ -577,7 +513,7 @@ int seuil(SDL_Surface *img)
         }
         else
         {
-            if (s < max){
+            if (s != 0 && s < max){
                 max = s;
             }
             s =0;
@@ -669,6 +605,8 @@ void cutword(SDL_Surface *img){
   int s =0;
   int pos = 0;
   int i;
+
+  //printf("CEST LE MINIMUN ZEBI%i\n",seuil1);
   
  
   for (i = 0; i<img -> w; i++){
@@ -681,7 +619,7 @@ void cutword(SDL_Surface *img){
     }
     else{
         //printf("S : %i",s);
-        if (s>= r*1.5)
+        if (s>= r*1.4)
         {
             DrawAColumn(img, pos, 0,img->h);
         }
