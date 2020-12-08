@@ -16,6 +16,8 @@ GtkWidget *grays;
 GtkWidget *contra;
 GtkWidget *biner;
 GtkWidget *play;
+GtkWidget *noise;
+GtkWidget *rotation;
 SDL_Surface *surf;
 
 int main(int argc, char *argv[])
@@ -35,6 +37,8 @@ int main(int argc, char *argv[])
   contra  = GTK_WIDGET(gtk_builder_get_object(builder, "contrastes"));
   biner = GTK_WIDGET(gtk_builder_get_object(builder, "binarisation"));
   play = GTK_WIDGET(gtk_builder_get_object(builder, "lanceTout"));
+  noise = GTK_WIDGET(gtk_builder_get_object(builder, "noise"));
+  rotation = GTK_WIDGET(gtk_builder_get_object(builder, "rotation"));
   g_object_unref(builder);
   gtk_widget_show(window);
   gtk_main();
@@ -59,6 +63,8 @@ void choose_image(char *file)
   gtk_widget_set_sensitive(grays, TRUE);
   gtk_widget_set_sensitive(contra, TRUE);
   gtk_widget_set_sensitive(biner, TRUE);
+  gtk_widget_set_sensitive(noise, TRUE);
+  gtk_widget_set_sensitive(rotation, TRUE);
   surf = load_image(file);
   SDL_SaveBMP(surf, "images/temp.bmp"); // L'image ou tu dois appliquer les fonctions est save dans images/temp.bmp
   SDL_FreeSurface(surf);
@@ -114,6 +120,16 @@ void seg()
 void cont()
 {
   //constrastes
+}
+
+void rot()
+{
+  //rotation automatique
+}
+
+void noise_reduction()
+{
+  //reduction du bruit
 }
 
 void on_quit_clicked()

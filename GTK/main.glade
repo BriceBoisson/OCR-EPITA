@@ -67,8 +67,8 @@
             <signal name="clicked" handler="plus_ninety" swapped="no"/>
           </object>
           <packing>
-            <property name="x">225</property>
-            <property name="y">150</property>
+            <property name="x">410</property>
+            <property name="y">250</property>
           </packing>
         </child>
         <child>
@@ -114,7 +114,7 @@
           </object>
           <packing>
             <property name="x">25</property>
-            <property name="y">325</property>
+            <property name="y">330</property>
           </packing>
         </child>
         <child>
@@ -136,7 +136,7 @@
           <object class="GtkButton" id="segmentation">
             <property name="label" translatable="yes">Segmentation</property>
             <property name="name">segm</property>
-            <property name="width-request">100</property>
+            <property name="width-request">125</property>
             <property name="height-request">80</property>
             <property name="visible">True</property>
             <property name="sensitive">False</property>
@@ -146,8 +146,8 @@
             <signal name="clicked" handler="seg" swapped="no"/>
           </object>
           <packing>
-            <property name="x">300</property>
-            <property name="y">250</property>
+            <property name="x">215</property>
+            <property name="y">150</property>
           </packing>
         </child>
         <child>
@@ -182,7 +182,7 @@
             <signal name="clicked" handler="bine" swapped="no"/>
           </object>
           <packing>
-            <property name="x">110</property>
+            <property name="x">165</property>
             <property name="y">250</property>
           </packing>
         </child>
@@ -202,6 +202,42 @@
           <packing>
             <property name="x">400</property>
             <property name="y">150</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="noise">
+            <property name="label" translatable="yes">noise</property>
+            <property name="name">noise</property>
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="resize-mode">immediate</property>
+            <signal name="clicked" handler="noise_reduction" swapped="no"/>
+          </object>
+          <packing>
+            <property name="x">285</property>
+            <property name="y">250</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="rotation">
+            <property name="label" translatable="yes">rotation</property>
+            <property name="name">rotation</property>
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="resize-mode">immediate</property>
+            <signal name="clicked" handler="rot" swapped="no"/>
+          </object>
+          <packing>
+            <property name="x">40</property>
+            <property name="y">250</property>
           </packing>
         </child>
       </object>
