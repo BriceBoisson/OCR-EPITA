@@ -1,10 +1,10 @@
 # Makefile
 
 CC=gcc
-CPPFLAGS= -MMD -D_XOPEN_SOURCE=500 `pkg-config --cflags sdl gtk+-3.0`
+CPPFLAGS= -MMD  `pkg-config --cflags sdl gtk+-3.0`
 CFLAGS= -Wall -Wextra -std=c99 -g
 LDFLAGS=
-LDLIBS= `pkg-config --libs sdl gtk+-3.0` -lSDL_image -lm -export-dynamic
+LDLIBS= `pkg-config --libs sdl gtk+-3.0` -lSDL_image -lm
 
 SRC=	main.c
 
