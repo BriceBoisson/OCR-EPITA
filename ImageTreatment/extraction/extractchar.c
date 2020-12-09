@@ -107,9 +107,9 @@ void extractchar(SDL_Surface* img,int x, int y)
     }
 
     SDL_SaveBMP(new,"final12.bmp");
-    //display_img(new);
+    display_img(new);
 
-   //wait_for_keypressed();
+   wait_for_keypressed();
     //s__extractline(new);
     SDL_FreeSurface(new);
 }
@@ -123,9 +123,9 @@ void __extractchar(SDL_Surface* img)
 
     CutColumn(loadedImage,0,img->h);
 
-    //display_img(loadedImage);
+    display_img(loadedImage);
 
-    //wait_for_keypressed();
+    wait_for_keypressed();
 
 
 
