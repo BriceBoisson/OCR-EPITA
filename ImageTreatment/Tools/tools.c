@@ -1,6 +1,6 @@
 # include "tools.h"
 
-#include <math.h>
+# include <math.h>
 
 Uint8* pixelref(SDL_Surface *surf, unsigned x, unsigned y)
 {
@@ -63,9 +63,6 @@ void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
             break;
     }
 }
-
-
-
 
 
 void pause1()
@@ -179,112 +176,15 @@ SDL_Surface* CreateWhiteSurface(int x, int y, SDL_Surface* img)
 }
 
 
-int FindBlackPixelv2(SDL_Surface *img, int x)
-{
-  Uint32 pixel;
-  int w;
-  Uint8 r, g, b;
-  int bool = 0; /*A boolean that memorize if the line contain black pixel or not*/
-  w = img -> w;
-  
 
-  for(int i = 0; i < w; i++)
- {
-    pixel = getpixel(img,i,x);
-    SDL_GetRGB(pixel, img->format, &r, &g, &b);
-
-    if (r == 0)
-    {
-        bool = 1;
-        break;
-    }
-
- }
-
- return bool;
-}
-
-SDL_Surface * resizechar(SDL_Surface* img)
-{
-    Uint32 pixel = 0;
-    int start = 0;
-    int end  = 0;
-    int booleen = 0;
-    Uint8 r, g, b;
-    SDL_Surface *loadedImage = 0;
-    loadedImage = SDL_LoadBMP("final12.bmp");
-
-
-    for (int i = 0; i < img->h; i++)
-    {     
-
-        if (FindBlackPixelv2(img,i))
-        {
-            
-            if (!booleen)
-            {
-                booleen = 1;
-                start = i;
-            }
-        }
-        else
-        {
-            if(booleen)
-            {
-                end = i;
-                booleen = 0;
-            }
-        }
-    } 
-
-    printf("end : %i, begin : %i \n",end,start);
-
-    SDL_Surface *new = CreateWhiteSurface(img->w+21, end-start,loadedImage);
-
-    for (int k = start; k < end; k++)
-    {
-        for (int z = 1; z < img->w; z++)
-        {
-            pixel = getpixel(img,z,k);
-            putpixel(new,z+10,k-start,pixel);
-           
-        }
-    }
-
-      for (int c = 0 ; c < end -start ; c++)
-    {
-        for (int t = 0 ; t < img->w+21 ; t ++)
-        {
-            pixel = getpixel(new,t,c);
-            SDL_GetRGB(pixel, new->format, &r, &g, &b);
-            if (r == 0 && g ==0 && b == 0)
-            {
-                
-                printf("%i ",1);
-            }
-            else
-            {
-                
-                printf("%i ",0);
-                
-            }
-            
-        }
-        printf("\n");
-    }
-
-
-    return resize(new,32,32);
-
-}
 
 SDL_Surface* rotate(double teta, SDL_Surface* img)
 {
     double radian = (teta * M_PI) / 180.0;
     int certerx = round(((img->w+1)/2)-1);
     int centery = round(((img->h+1)/2)-1);
-    int xprime;
-    int yprime;
+    int xprime = 0;
+    int yprime = 0;
     Uint32 pixel = 0;
     SDL_Surface * new = CreateWhiteSurface(img->w,img->h,img);
 
@@ -298,21 +198,16 @@ SDL_Surface* rotate(double teta, SDL_Surface* img)
                             (double)(i-certerx)*sin(radian));
                             
             xprime += certerx;
-            yprime +=centery;
+            yprime += centery;
 
             if (xprime >= 0 && xprime < img->w && yprime < img->h && yprime >= 0)
             {
                 pixel = getpixel(img,i,j);
                 putpixel(new,xprime,yprime,pixel);
             }
-        }
-
-       
-        
+        }        
     }
-
-    return new;
-    
+    return new; 
 }
 
 double houghtrasformy(SDL_Surface *img)
@@ -348,14 +243,7 @@ double houghtrasformy(SDL_Surface *img)
     }
 
     double resulte = maxhough(tab,maxrow);
-    //double tetadsd = (resulte * M_PI) / 180.0;
-
-    printf("%fd\n",resulte);
-    //free(tab);
-
-    return resulte;
-
-    
+    return resulte;    
 }
 
 double maxhough(int *tab, size_t maxrow)
@@ -367,12 +255,10 @@ double maxhough(int *tab, size_t maxrow)
     for (size_t i = 0; i < maxrow; ++i) {
         for (size_t j = 0; j < maxteta; ++j) {
             if (tab[j + i * maxteta] > max) {
-                printf("%i j = %zu  ",tab[i + j * maxteta],j);
                 max = tab[j + i * maxteta];
                 ThetaR = j;
             }
         }
-        printf("\n");
     }
     return ThetaR;
 }

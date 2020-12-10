@@ -1,0 +1,26 @@
+CC=gcc 
+CFLAGS=-Wall -Werror -Wextra -O0
+LDFLAGS= -lSDL2
+EXEC= test
+
+
+
+all: $(EXEC)
+
+
+test: Load.c 
+	$(CC) -o ImageTreatment main.o segmentation.o cleanerimage.o tools.o display.o extraction.o $(LDFLAGS) -MMD
+
+
+Load.o: Load.c
+	$(CC) -o Load.o -c Load.c $(CFLAGS)
+
+extraction.o: extraction/extraction.c
+	$(CC) -o extraction.o -c extraction/extraction.c $(CFLAGS)
+
+clean:
+	rm -rf *.o
+
+
+
+	

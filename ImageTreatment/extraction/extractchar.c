@@ -15,7 +15,7 @@ int countwc(SDL_Surface* img)
         SDL_GetRGB(pixel, img->format, &r, &g, &b);
         if ((r== 1 && g == 100 && b == 100))
         {
-            printf("word r : %i, g : %i, b: %i, y = %i\n",r,g,b,i);
+            //printf("word r : %i, g : %i, b: %i, y = %i\n",r,g,b,i);
             count++;
         }
     }
@@ -76,14 +76,14 @@ void __extractword(SDL_Surface* img)
     display_img(loadedImage);
     wait_for_keypressed();
     int count = countwc(loadedImage);
-    printf("count word : %i\n", count);
+   // printf("count word : %i\n", count);
    // printf("count : %i\n", count);
     int *tab = malloc(sizeof(int)*count);
     ReturnPoswc(loadedImage, tab);
 
     for (int i = 0; i < count-1; i+=1)
     {
-        printf("coord word : %i, %i\n", tab[i],tab[i+1]);
+        //printf("coord word : %i, %i\n", tab[i],tab[i+1]);
         extractword(loadedImage, tab[i], tab[i+1]);       
 
     }
@@ -139,7 +139,7 @@ void __extractchar(SDL_Surface* img)
 
     for (int i = 0; i < count-1; i+=2)
     {
-        printf("coord char : %i, %i\n", tab[i],tab[i+1]);
+        //printf("coord char : %i, %i\n", tab[i],tab[i+1]);
         extractchar(loadedImage, tab[i], tab[i+1]);       
 
     }

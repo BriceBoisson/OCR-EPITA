@@ -606,7 +606,6 @@ void cutword(SDL_Surface *img){
   int pos = 0;
   int i;
 
-  //printf("CEST LE MINIMUN ZEBI%i\n",seuil1);
   
  
   for (i = 0; i<img -> w; i++){

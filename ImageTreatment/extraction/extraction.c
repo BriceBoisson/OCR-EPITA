@@ -17,7 +17,7 @@ int countlinepar(SDL_Surface* img)
         SDL_GetRGB(pixel, img->format, &r, &g, &b);
         if ((r== 0 && g == 0 && b == 255) || (r == 255 && g == 150 && b == 255))
         {
-            printf("r : %i, g : %i, b: %i, y = %i\n",r,g,b,i);
+            //printf("r : %i, g : %i, b: %i, y = %i\n",r,g,b,i);
             count++;
         }
     }
@@ -97,7 +97,7 @@ void __extractpar(SDL_Surface* img)
 
     for (int i = 0; i < count; i+=2)
     {
-        printf("coord : %i, %i\n", tab[i],tab[i+1]);
+        //printf("coord : %i, %i\n", tab[i],tab[i+1]);
         extractpar(copy_image1, tab[i], tab[i+1]);       
 
     }
@@ -132,6 +132,7 @@ void extractline(SDL_Surface *img, int x, int y)
     SDL_SaveBMP(new,"final13.bmp");
 
     __extractword(new);
+    SDL_FreeSurface(new);
 }
 
 void __extractline(SDL_Surface *img)
@@ -148,7 +149,7 @@ void __extractline(SDL_Surface *img)
     ReturnPosPar(copy, tab);
     for (int i = 0; i < count; i+=2)
     {
-        printf("coord : %i, %i\n", tab[i],tab[i+1]);
+        //printf("coord : %i, %i\n", tab[i],tab[i+1]);
         extractline(copy, tab[i], tab[i+1]);       
 
     }
