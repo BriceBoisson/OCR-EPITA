@@ -1,6 +1,6 @@
 CC=gcc
 CPPFLAGS= -MMD `pkg-config --cflags gtk+-3.0`
-CFLAGS= -Wall -Wextra -std=c99 -g
+CFLAGS= -Wall -Wextra -std=c99 -g -D_XOPEN_SOURCE=600
 LDLIBS= `pkg-config --libs gtk+-3.0` -lSDL2 -lm 
 EXEC= OCR
 
@@ -23,7 +23,7 @@ cleanerimage.o: ImageTreatment/Filter/cleanerimage.c
 	$(CC) -o cleanerimage.o -c ImageTreatment/Filter/cleanerimage.c $(CFLAGS) $(CPPFLAGS)
 
 tools.o: ImageTreatment/Tools/tools.c
-	$(CC) -o tools.o -c ImageTreatment/Tools/tools.c $(CFLAGS) $(CPPFLAGS)
+	$(CC) -o tools.o -c ImageTreatment/Tools/tools.c $(CFLAGS) $(CPPFLAGS) -lm
 
 display.o: ImageTreatment/display.c
 	$(CC) -o display.o -c ImageTreatment/display.c $(CFLAGS) $(CPPFLAGS)
