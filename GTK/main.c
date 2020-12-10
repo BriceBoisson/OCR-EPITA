@@ -66,7 +66,7 @@ void choose_image(char *file)
   gtk_widget_set_sensitive(noise, TRUE);
   gtk_widget_set_sensitive(rotation, TRUE);
   surf = load_image(file);
-  SDL_SaveBMP(surf, "images/temp.bmp"); // L'image ou tu dois appliquer les fonctions est save dans images/temp.bmp
+  SDL_SaveBMP(surf, "images/temp.bmp");
   SDL_FreeSurface(surf);
 }
 
@@ -77,6 +77,14 @@ void file_selected(GtkWidget *filechooserbutton)
   choose_image(filename);
 }
 
+
+// Il faut juste que tu mettes tes fonctions à la place des commentaires. Si jamais tu as pas certaines fonctions
+// par exemple pour recup le resultat du reseau de neurones dis le moi et je les demanderai à Axelle ou Brice.
+
+
+// Pour les fonctions, l'image à modifier est sauvegardée dans le fichier images/temp.bmp
+
+
 void play_button()
 {
   GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textBox));
@@ -85,17 +93,17 @@ void play_button()
   char *result = malloc(sizeof(char) * 100000);
 
 
-  //fait toutes les étapes sur la variable 'result' qui doit etre le texte renvoyé par le reseau de neurones
+  // result sera le texte final
+  // traitement de l'image (dans le fichier images/temp.bmp)
+  // segmentation de l'image
+  // envoi au reseau de neurones
+  // stockage du resultat du reseau de neurones dans la variable result
 
 
   gtk_text_buffer_insert(buffer, &iter, result, -1);
   gtk_widget_show(final);
   gtk_widget_hide(window);
 }
-
-
-
-// Pour les fonctions, l'image à modifier est sauvegardée dans le fichier images/temp.bmp
 
 void plus_ninety()
 {
@@ -136,3 +144,4 @@ void on_quit_clicked()
 { 
   gtk_main_quit();
 }
+
