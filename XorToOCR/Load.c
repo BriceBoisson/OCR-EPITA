@@ -96,6 +96,7 @@ void get_binerize_matrix(SDL_Surface *img, double *image)
 
 double *resizechar(SDL_Surface* img, int size)
 {
+    
     int startcol = 0;
     int endcol  = 0;
     int startrow = 0;

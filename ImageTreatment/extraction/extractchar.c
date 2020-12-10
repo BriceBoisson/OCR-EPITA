@@ -1,5 +1,6 @@
 #include "extractchar.h"
 #include "../display.h"
+#include <string.h>
 
 int countwc(SDL_Surface* img)
 {
@@ -42,9 +43,8 @@ void ReturnPoswc(SDL_Surface* img, int *tab)
     }
 }
 
-void extractword(SDL_Surface* img,int x, int y,Neural_Network *network)
-{
-    printf("nd word \n"); 
+void extractword(SDL_Surface* img,int x, int y,Neural_Network *network,char *str)
+{ 
     SDL_Surface* new = CreateWhiteSurface(y-x+1,img->h, img);
     Uint32 pixel;
     
@@ -63,18 +63,18 @@ void extractword(SDL_Surface* img,int x, int y,Neural_Network *network)
     //display_img(new);
 
     //wait_for_keypressed();
-    __extractchar(new,network);
+    __extractchar(new,network,str);
     SDL_FreeSurface(new);
 }
 
-void __extractword(SDL_Surface* img,Neural_Network *network)
+void __extractword(SDL_Surface* img,Neural_Network *network,char *str)
 {
     SDL_Surface* loadedImage=resize(img,1218,41);
-    display_img(loadedImage);
-    wait_for_keypressed();
+    //display_img(loadedImage);
+   // wait_for_keypressed();
     cutword(loadedImage);
-    display_img(loadedImage);
-    wait_for_keypressed();
+    //display_img(loadedImage);
+    //wait_for_keypressed();
     int count = countwc(loadedImage);
    // printf("count word : %i\n", count);
    // printf("count : %i\n", count);
@@ -84,14 +84,17 @@ void __extractword(SDL_Surface* img,Neural_Network *network)
     for (int i = 0; i < count-1; i+=1)
     {
         //printf("coord word : %i, %i\n", tab[i],tab[i+1]);
-        extractword(loadedImage, tab[i], tab[i+1],network);       
+        extractword(loadedImage, tab[i], tab[i+1],network,str);
+        char a[1];
+        a[0] =' ';
+        strcat(str,a);          
 
     }
     SDL_FreeSurface(loadedImage);
     free(tab);
 }
 
-void extractchar(SDL_Surface* img,int x, int y,Neural_Network *network)
+void extractchar(SDL_Surface* img,int x, int y,Neural_Network *network,char *str)
 {
     SDL_Surface* new = CreateWhiteSurface(y-x+1,img->h, img);
     Uint32 pixel = 0;
@@ -107,16 +110,21 @@ void extractchar(SDL_Surface* img,int x, int y,Neural_Network *network)
     }
 
     //SDL_SaveBMP(new,"final12.bmp");
-    display_img(new);//PERMET D'AFFICHER UNE IMAGE, ICI LE CARACTERE DECOUPE (utile pour débugger) Tu peux les retirer dans les fonctions
+    //display_img(new);//PERMET D'AFFICHER UNE IMAGE, ICI LE CARACTERE DECOUPE (utile pour débugger) Tu peux les retirer dans les fonctions
     /* ICI ON A UN CARACTERE DECOUPE QUE LON PEUT ENVOYER AU RESEAU*/
-    wait_for_keypressed();//PERMET DE FAIRE UNE PAUSE et DATTENDRE LAPPUIE SUR UNE TOUCHE 
+    //wait_for_keypressed();//PERMET DE FAIRE UNE PAUSE et DATTENDRE LAPPUIE SUR UNE TOUCHE 
     ForwardPass(segmentationtomatrix(new, 20), network);
-    char a = indiceToChar(network->output);
-    printf("CHAR DETECT : %c",a);
-    SDL_FreeSurface(new);
+    char a[2];
+    a[0] = indiceToChar(network->output);
+    a[1]='\0';
+
+    //printf("CHAR DETECT : %s",a);
+    strcat(str,a);   
+    
+    //SDL_FreeSurface(new);
 }
 
-void __extractchar(SDL_Surface* img,Neural_Network *network)
+void __extractchar(SDL_Surface* img,Neural_Network *network,char *str)
 {
    SDL_Surface* loadedImage=copy_image(img);
     //display_img(loadedImage);
@@ -125,9 +133,9 @@ void __extractchar(SDL_Surface* img,Neural_Network *network)
 
     CutColumn(loadedImage,0,img->h);
 
-    display_img(loadedImage);
+    //display_img(loadedImage);
 
-    wait_for_keypressed();
+   // wait_for_keypressed();
 
 
 
@@ -142,7 +150,7 @@ void __extractchar(SDL_Surface* img,Neural_Network *network)
     for (int i = 0; i < count-1; i+=2)
     {
         //printf("coord char : %i, %i\n", tab[i],tab[i+1]);
-        extractchar(loadedImage, tab[i], tab[i+1],network);       
+        extractchar(loadedImage, tab[i], tab[i+1],network, str);       
 
     }
     SDL_FreeSurface(loadedImage);

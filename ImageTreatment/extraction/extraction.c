@@ -2,6 +2,7 @@
 #include "extractchar.h"
 #include "../display.h"
 #include "../Segmentation/segmentation.h"
+#include <string.h>
 
 int countlinepar(SDL_Surface* img)
 {
@@ -45,7 +46,7 @@ void ReturnPosPar(SDL_Surface* img, int *tab)
 }
 
 
-void extractpar(SDL_Surface* img,int x, int y,Neural_Network *network)
+void extractpar(SDL_Surface* img,int x, int y,Neural_Network *network, char *str)
 {
     SDL_Surface* new = CreateWhiteSurface(img->w,y-x+1, img);
     Uint32 pixel = 0;
@@ -64,11 +65,11 @@ void extractpar(SDL_Surface* img,int x, int y,Neural_Network *network)
     display_img(new);
 
     wait_for_keypressed();
-    __extractline(new,network);
+    __extractline(new,network,str);
     SDL_FreeSurface(new);
 }
 
-void __extractpar(SDL_Surface* img,Neural_Network *network)
+void __extractpar(SDL_Surface* img,Neural_Network *network, char *str)
 {
     SDL_Surface *imagev = copy_image(img);
     SDL_Surface *imagerlsa = copy_image(img);
@@ -98,7 +99,9 @@ void __extractpar(SDL_Surface* img,Neural_Network *network)
     for (int i = 0; i < count; i+=2)
     {
         //printf("coord : %i, %i\n", tab[i],tab[i+1]);
-        extractpar(copy_image1, tab[i], tab[i+1],network);       
+        extractpar(copy_image1, tab[i], tab[i+1],network,str); 
+        char a[] = "\n\n\n";
+        strcat(str,a);      
 
     }
     SDL_FreeSurface(imagerlsa);
@@ -110,7 +113,7 @@ void __extractpar(SDL_Surface* img,Neural_Network *network)
 
 
 
-void extractline(SDL_Surface *img, int x, int y,Neural_Network *network)
+void extractline(SDL_Surface *img, int x, int y,Neural_Network *network, char *str)
 {
     SDL_Surface* new = CreateWhiteSurface(img->w,y-x+1, img);
     Uint32 pixel = 0;
@@ -131,11 +134,11 @@ void extractline(SDL_Surface *img, int x, int y,Neural_Network *network)
 
     SDL_SaveBMP(new,"final13.bmp");
 
-    __extractword(new,network);
+    __extractword(new,network,str);
     SDL_FreeSurface(new);
 }
 
-void __extractline(SDL_Surface *img,Neural_Network *network)
+void __extractline(SDL_Surface *img,Neural_Network *network, char *str)
 {
 
     SDL_Surface* copy = copy_image(img);
@@ -150,7 +153,10 @@ void __extractline(SDL_Surface *img,Neural_Network *network)
     for (int i = 0; i < count; i+=2)
     {
         //printf("coord : %i, %i\n", tab[i],tab[i+1]);
-        extractline(copy, tab[i], tab[i+1],network);       
+        extractline(copy, tab[i], tab[i+1],network,str); 
+        char a[1];
+        a[0]='\n';
+        strcat(str,a);         
 
     }
 
