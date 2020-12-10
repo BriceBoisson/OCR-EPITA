@@ -4,7 +4,7 @@
 #include <time.h>
 #include <sys/stat.h>
 #include <string.h>
-#include <SDL2/SDL.h>
+
 #include <SDL2/SDL_image.h>
 
 #include "traitement.h"
@@ -26,7 +26,25 @@ double sigmoid(double val)
     return (1.0 / (1.0 + exp(-1.0 * val)));
 }
 
-void softmax(Neural_Network_Layer *layer, double somme){
+void softmax(Neural_Network_Layer *layer){
+    double min = 0;
+    for (int i = 0; i < layer->nb_cells; i++)
+    {
+        if (layer->cells[i].output < min){
+            min = layer->cells[i].output;
+        }
+    }
+
+    //printf("%f", min);
+    double somme = 0;
+    for (int i = 0; i < layer->nb_cells; i++)
+    {
+        layer->cells[i].output -= min;
+        somme += exp(layer->cells[i].output);
+        //printf("%f  %f\n",layer->cells[i].output , exp(layer->cells[i].output));
+    }
+    
+    //printf("somme %f\n", somme);
     for (int i = 0; i < layer->nb_cells; i++){
         layer->cells[i].output = (exp(layer->cells[i].output)/somme);
     }
@@ -44,13 +62,39 @@ int charToIndice(char c)
     return (62);
 }
 
-char indiceToChar(int indice);
-//TO-DO : écrire fonction indiceToChar, inverse de celle du dessus.
+char indiceToChar(int indice){
+    if (indice < 26){
+        return indice + 97;
+    }
+    else if (indice < 52)
+    {
+        return indice + 39;
+    }
+    else
+    {
+        return indice - 4;
+    }
+}
 
 double* imagetomatrix(char* str, int size){
     SDL_Surface *loadedImage = 0;
     loadedImage = SDL_LoadBMP(str);
     //loadedImage = IMG_Load(str);
+    double *img = NULL;
+
+    if (!loadedImage)
+    {
+        printf("Can't find the bmp file, %s\n", str);
+        return img;
+    }
+
+    img = resizechar(loadedImage, size);
+
+    //SDL_FreeSurface(loadedImage);
+    return img;
+}
+
+double *segmentationtomatrix(SDL_Surface *loadedImage, int size){
     double *img = NULL;
 
     if (!loadedImage)
@@ -61,15 +105,6 @@ double* imagetomatrix(char* str, int size){
 
     img = resizechar(loadedImage, size);
 
-    for (int k = 0; k < size; k++)
-    {
-        for (int z = 0; z < size; z++)
-        {
-           printf("%d ", (int) img[k*size + z]);
-        }
-        printf("\n");
-    }
-
     //SDL_FreeSurface(loadedImage);
     return img;
 }
@@ -77,3 +112,4 @@ double* imagetomatrix(char* str, int size){
 double generateChar(){
     return ((double) (rand()%62));
 }
+

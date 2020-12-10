@@ -15,7 +15,7 @@ os.chdir (os.path.dirname(os.path.dirname(__file__)) + '/src/Dataset')
 lon_font = len(L)
 lon_char = len(letter)
 
-for j in range(7):
+for j in range(lon_char):
     for i in range(lon_font):
         font = ImageFont.truetype(L[i], 24)
         img = Image.new('RGB', (32, 32), color = 'white')

@@ -3,6 +3,6 @@
 
 #include "structure.h"
 
-void training(Neural_Network *network, int nb_repetition);
+int training(Neural_Network *network, int nb_repetition);
 
 #endif

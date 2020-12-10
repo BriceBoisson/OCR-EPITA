@@ -23,7 +23,20 @@ SDL_Surface *surf;
 
 int main(int argc, char *argv[])
 {
-  SDL_Init(SDL_INIT_VIDEO);
+  Neural_Network network = Initialisation();
+  training(&network, 100);
+  Free_Network(&network);
+
+  /*
+ Neural_Network network = Initialisation();
+    training(&network, 100);
+
+    char car = indiceToChar(ForwardPass(segmentationtomatrix(IMAGE, 20), &network));
+
+    Free_Network(&network);
+ */ 
+  
+  /*SDL_Init(SDL_INIT_VIDEO);
   GtkBuilder *builder;
   gtk_init(&argc, &argv);
   builder = gtk_builder_new();
@@ -42,7 +55,8 @@ int main(int argc, char *argv[])
   rotation = GTK_WIDGET(gtk_builder_get_object(builder, "rotation"));
   g_object_unref(builder);
   gtk_widget_show(window);
-  gtk_main();
+  gtk_main();*/
+
   return 0;
 }
 
