@@ -461,7 +461,6 @@ void histo(SDL_Surface *img, int* histo1)
       }
     }
     histo1[i]= h -s;
-    printf("%i ",histo1[i]);
   }
   
 }

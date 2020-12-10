@@ -6,8 +6,8 @@
 #include "ImageTreatment/Filter/cleanerimage.h"
 #include "ImageTreatment/display.h"
 
-#include "XORtoOCR/traitement.h"
-#include "XORtoOCR/toolsnetworks.h"
-#include "XORtoOCR/training.h"
-#include "XORtoOCR/structure.h"
+#include "XorToOCR/traitement.h"
+#include "XorToOCR/toolsnetworks.h"
+#include "XorToOCR/training.h"
+#include "XorToOCR/structure.h"
 

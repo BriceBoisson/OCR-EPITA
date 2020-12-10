@@ -23,20 +23,10 @@ SDL_Surface *surf;
 
 int main(int argc, char *argv[])
 {
-  Neural_Network network = Initialisation();
-  training(&network, 100);
-  Free_Network(&network);
 
-  /*
- Neural_Network network = Initialisation();
-    training(&network, 100);
-
-    char car = indiceToChar(ForwardPass(segmentationtomatrix(IMAGE, 20), &network));
-
-    Free_Network(&network);
- */ 
+ 
   
-  /*SDL_Init(SDL_INIT_VIDEO);
+  SDL_Init(SDL_INIT_VIDEO);
   GtkBuilder *builder;
   gtk_init(&argc, &argv);
   builder = gtk_builder_new();
@@ -55,7 +45,7 @@ int main(int argc, char *argv[])
   rotation = GTK_WIDGET(gtk_builder_get_object(builder, "rotation"));
   g_object_unref(builder);
   gtk_widget_show(window);
-  gtk_main();*/
+  gtk_main();
 
   return 0;
 }
@@ -82,7 +72,7 @@ void choose_image(char *file)
   gtk_widget_set_sensitive(rotation, TRUE);
   surf = load_image(file);
   SDL_SaveBMP(surf, "images/temp.bmp");
-  //SDL_FreeSurface(surf);
+  SDL_FreeSurface(surf);
 }
 
 void file_selected(GtkWidget *filechooserbutton)
@@ -123,13 +113,13 @@ void play_button()
 void plus_ninety()
 {
   SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
-  display_img(surf);
+  display_img(loadedImage);
   wait_for_keypressed();
-  grayscale(surf);         
-  binerize(surf); 
-  display_img(rotate(90,surf));
+  grayscale(loadedImage);         
+  binerize(loadedImage); 
+  display_img(rotate(90,loadedImage));
   wait_for_keypressed();
-  //SDL_FreeSurface(surf);      
+  SDL_FreeSurface(loadedImage);      
 }
 
 void gray()
@@ -144,7 +134,11 @@ void bine()
 
 void seg()
 {
-  //segmentation
+  SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
+  Neural_Network network = Initialisation();
+  training(&network, 100);
+  __extractpar(loadedImage,&network);
+  Free_Network(&network);
 }
 
 void cont()
