@@ -9,7 +9,7 @@
 #include "structure.h"
 
 #define NB_PIXEL 400
-#define NB_OUTPUT 63
+#define NB_OUTPUT 7
 
 // Fonctions de traitement du reseau de neurone : Initialisation, Forward et
 // backpropagation.
@@ -70,43 +70,52 @@ void ForwardPass(double entries[], Neural_Network *network)
         {
             tmp += cell.weights[k]*previous_layer.cells[k].output;
         }
-        (*network).layers[1].cells[0].output = tmp;
+        (*network).layers[1].cells[i].output = tmp;
         somme += exp(tmp);
     }
 
     //On récupère l'indice de la valeur d'output la plus grande
     //après le traitement.
     softmax(&layer, somme);
+    
+		//printf("%f\n", network->layers[1].cells[0].output);
+		//printf("%f\n", network->layers[1].cells[1].output);
     (*network).output = getIndiceMax(network);
-
 }
 
-void BackwardPass(double expected, double *entries, 
+void BackwardPass(double *expected, double *entries, 
                                             Neural_Network *network)
 {
-    double cell_output = (*network).layers[1].cells[0].output;
-    double dCell_output = cell_output*(1-cell_output);
-    double dError = (expected-cell_output);
-    
-    for (int j = 0; j < (*network).layers[0].cells[0].nb_weight; j++)
-    {
-        double f = (*network).layers[0].cells[j].output;
-        (*network).layers[1].cells[0].previous_dError[j] = dCell_output * dError;
-        (*network).layers[1].cells[0].weights[j] += f * dCell_output * dError;
+    for (int i = 0; i < network->nboutput; i++){
+        double cell_output = (*network).layers[1].cells[i].output;
+        double dCell_output = cell_output*(1-cell_output);
+        double dError = (expected[i]-cell_output);
+        
+        for (int j = 0; j < (*network).layers[1].cells[i].nb_weight; j++)
+        {
+            double f = (*network).layers[0].cells[j].output;
+            (*network).layers[1].cells[i].previous_dError[j] = (*network).layers[1].cells[i].weights[j] * dCell_output * dError;
+            (*network).layers[1].cells[i].weights[j] += f * dCell_output * dError;
+        }
+        (*network).layers[1].cells[i].biais += dCell_output * dError;
     }
-    
-    (*network).layers[1].cells[0].biais += dCell_output * dError;
+
+
 
     for (int i = 0; i < (*network).layers[0].nb_cells; i++)
     {
         double cell_output = (*network).layers[0].cells[i].output;
         double dg = cell_output*(1-cell_output);
-        double dError = (*network).layers[1].cells[0].previous_dError[i];
+        double dError = 0;
+
+        for (int j = 0; j < (*network).layers[1].nb_cells; j++){
+            dError += (*network).layers[1].cells[j].previous_dError[i];
+        }
         
         for (int j = 0; j < (*network).layers[0].cells[i].nb_weight; j++)
         {
             double f = entries[j];
-            dError *= (*network).layers[1].cells[0].weights[i];
+            //dError *= (*network).layers[1].cells[0].weights[i];
             (*network).layers[0].cells[i].weights[j] += f * dg * dError;
         }
         (*network).layers[0].cells[i].biais += dg * dError;

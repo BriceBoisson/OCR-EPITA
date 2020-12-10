@@ -63,91 +63,57 @@ void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
     }
 }
 
-SDL_Surface* resize(SDL_Surface *img, int x, int y)
+double* resize(double *img, int w, int h, int x, int y)
 {
-    Uint32 pixel;
-     SDL_Surface* new = SDL_CreateRGBSurface(0,
-                              x,
-                              y,
-                              img -> format -> BitsPerPixel,0,0,0,0);
-            int w = img -> w;
-            int h = img -> h;
-            float ratioX = (float) w / x;
-            float ratioY = (float) h / y;
-            for (int i = 0; i < x; ++i)
-            {
-                for (int j = 0; j < y; ++j)
-                {
-                    pixel = getpixel(img,(int) (i * ratioX), (int) (j * ratioY));
-                    putpixel(new,i, j, pixel);
-                }
-            }
-            return new;
-}
-
-
-SDL_Surface* CreateWhiteSurface(int x, int y, SDL_Surface* img)
-{
-    Uint32 pixel;
-    SDL_Surface* new = SDL_CreateRGBSurface(0,
-                              x,
-                              y,
-                              img -> format -> BitsPerPixel,0,0,0,0);
-    
-    for (int i = 0 ; i < new -> w; i++)
+    double *image = (double*)calloc(x*y, sizeof(double));
+    float ratioX = (float) w / x;
+    float ratioY = (float) h / y;
+    for (int i = 0; i < x; ++i)
     {
-        for (int j = 0; j < new -> h; j++)
+        for (int j = 0; j < y; ++j)
         {
-           pixel = SDL_MapRGB(img->format, 255, 255, 255);
-           putpixel(new, i, j, pixel);
+            image[i*x + j] = img[((int) (i * ratioY))*w + ((int) (j * ratioX))];
+            //pixel = getpixel(img,(int) (i * ratioX), (int) (j * ratioY));
+            //putpixel(new,i, j, pixel);
         }
     }
-
-    return new;
-
+    return image;
 }
 
 
-int FindBlackPixelcol(SDL_Surface *img, int x)
+int FindBlackPixelrow(double *img, int w, int x)
 {
-  Uint32 pixel;
-  int w;
-  Uint8 r, g, b;
-  int bool = 0; /*A boolean that memorize if the line contain black pixel or not*/
-  w = img -> w;
-  
+
+    int bool = 0; /*A boolean that memorize if the line contain black pixel or not*/
+    double pixel;
+       //printf("\n%d: ", x);
 
   for(int i = 0; i < w; i++)
  {
-    pixel = getpixel(img,i,x);
-    SDL_GetRGB(pixel, img->format, &r, &g, &b);
-        //printf("%d", r);
-    if (r == 0)
+    pixel = img[x*w + i];
+//printf("%d ", (int) pixel);
+    if (pixel == 1)
     {
         bool = 1;
         break;
     }
 
  }
-//printf("\n");
  return bool;
 }
 
-int FindBlackPixelrow(SDL_Surface *img, int x)
+int FindBlackPixelcol(double *img, int w, int h, int x)
 {
-  Uint32 pixel;
-  int h;
-  Uint8 r, g, b;
-  int bool = 0; /*A boolean that memorize if the line contain black pixel or not*/
-  h = img -> h;
-  
+    int bool = 0; /*A boolean that memorize if the line contain black pixel or not*/
+    double pixel;
+
+    //printf("\n%d : ", x);
 
   for(int i = 0; i < h; i++)
  {
-    pixel = getpixel(img,x,i);
-    SDL_GetRGB(pixel, img->format, &r, &g, &b);
-
-    if (r == 0)
+    pixel = img[i*w + x];
+    //printf("%f ", pixel);
+    if (pixel == 1)
     {
         bool = 1;
         break;
@@ -157,7 +123,7 @@ int FindBlackPixelrow(SDL_Surface *img, int x)
  return bool;
 }
 
-void binerize(SDL_Surface *img)
+void get_binerize_matrix(SDL_Surface *img, double *image)
 {
   /* Variables */
   Uint32 pixel;
@@ -167,32 +133,23 @@ void binerize(SDL_Surface *img)
   int w = img -> w;
   int h = img -> h;
   
- for(int i = 0; i < w; i++)
+ for(int i = 0; i < h; i++)
  {
-   for(int j = 0; j < h; j++)
+   for(int j = 0; j < w; j++)
    {
-     pixel = getpixel(img,i,j);
+     pixel = getpixel(img,j,i);
      SDL_GetRGB(pixel, img->format, &r, &g, &b);
 
      Uint32 average = (r+b+g) /3;
 
-     
-
-    
      if(average > 150) /*we can make an average here*/
      {
-      r = 255;
-      g = 255;
-      b = 255;
+         image[i*w + j] = 0.0;
      }
      else
      {
-      r = 0;
-      g = 0;
-      b = 0;
+        image[i*w + j] = 1.0;
      }
-     pixel = SDL_MapRGB(img->format, r, g, b);
-     putpixel(img, i, j, pixel);
    }
  }
 
@@ -200,111 +157,87 @@ void binerize(SDL_Surface *img)
 
 double *resizechar(SDL_Surface* img, int size)
 {
-    Uint32 pixel = 0;
     int startcol = 0;
     int endcol  = 0;
     int startrow = 0;
     int endrow  = 0;
-    //SDL_Surface *loadedImage = 0;
-    //loadedImage = SDL_LoadBMP("final12.bmp");
 
-    binerize(img);
+    int img_w = img->w;
+    int img_h = img->h;
 
-        for (int k = 0; k < img->w; k++)
-    {
-        for (int z = 0; z < img->h; z++)
-        {
-           printf("%d ", ((int) getpixel(img,z,k)));
-        }
-        printf("\n");
-    }
+    double *img_array = (double*)malloc(img_h*img_w*sizeof(double));
 
-    for (int i = 0; i < img->h; i++)
+    get_binerize_matrix(img, img_array);
+
+    for (int i = 0; i < img_w; i++)
     {     
-        if (FindBlackPixelrow(img,i))
+        if (FindBlackPixelcol(img_array, img_w, img_h, i))
         { 
             startcol = i;
             break;
         }
     }
-    for (int i = img->h; i >= 0; i--)
+    for (int i = img_w-1; i >= 0; i--)
     {
-        if (FindBlackPixelrow(img,i))
+        if (FindBlackPixelcol(img_array, img_w, img_h, i))
         { 
             endcol = i+1;
             break;
         }
     }
-
-        for (int i = 0; i < img->w; i++)
+    for (int i = 0; i < img_h; i++)
     {     
-        if (FindBlackPixelcol(img,i))
+        if (FindBlackPixelrow(img_array, img_w, i))
         { 
             startrow = i;
             break;
         }
     }
-    for (int i = img->w; i >= 0; i--)
+    for (int i = img_h-1; i >= 0; i--)
     {     
-        if (FindBlackPixelcol(img,i))
+        if (FindBlackPixelrow(img_array, img_w, i))
         { 
             endrow = i+1;
             break;
         }
     }
 
-    SDL_Surface *new = NULL;
+    double *img_carre;
+    int img_carre_size;
     int lencol = endcol - startcol;
-    printf("%d, %d, %d\n", lencol, endcol, startcol);
     int lenrow = endrow - startrow;
-    printf("%d, %d, %d\n", lenrow, endrow, startrow);
     if (lencol > lenrow){
-        new = CreateWhiteSurface(lencol, lencol, img);
+        img_carre_size = lencol;
+        img_carre = (double*)calloc(lencol*lencol, sizeof(double));
         int start = lencol/2 - lenrow/2;
-        for (int k = startcol; k < endcol; k++)
+        for (int k = startrow; k < endrow; k++)
         {
-            for (int z = startrow; z < endrow; z++)
+            for (int z = startcol; z < endcol; z++)
             {
-                pixel = getpixel(img,z,k);
-                putpixel(new,start+z,k-startcol,pixel);
+                img_carre[(k-startrow+start)*lencol+z-startcol] = img_array[k*img_w + z];
             }
         }
     }
     else
     {
-        new = CreateWhiteSurface(lenrow, lenrow, img);
+        img_carre_size = lenrow;
+        img_carre = (double*)calloc(lenrow*lenrow, sizeof(double));
         int start = lenrow/2 - lencol/2;
-        for (int k = startcol; k < endcol; k++)
+        for (int k = startrow; k < endrow; k++)
         {
-            for (int z = startrow; z < endrow; z++)
+            for (int z = startcol; z < endcol; z++)
             {
-                pixel = getpixel(img,z,k);
-                putpixel(new,z-startrow,k+start,pixel);
+                img_carre[(k-startrow)*lenrow+z-startcol+start] = img_array[k*img_w + z];
             }
         }
     }
 
-printf("%d", size);
-    //new = resize(new,size,size);
-    double *image = (double*)malloc(lencol*lencol*sizeof(double));
+    double *image;
+    image = resize(img_carre, img_carre_size, img_carre_size, size, size);
 
-    for (int k = 0; k < lencol; k++)
-    {
-        for (int z = 0; z < lencol; z++)
-        {
-            pixel = getpixel(new,k,z);
-            image[k*lencol + z] = (double) pixel;
-        }
-    }
-
-    /*for (int k = 0; k < lencol; k++)
-    {
-        for (int z = 0; z < lencol; z++)
-        {
-           printf("%d ", ((int) image[z*lencol + k]));
-        }
-        printf("\n");
-    }*/
+    SDL_FreeSurface(img);
+    free(img_array);
+    free(img_carre);
 
     return image;
 }

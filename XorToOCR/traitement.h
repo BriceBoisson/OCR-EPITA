@@ -4,7 +4,7 @@
 
 Neural_Network Initialisation();
 void ForwardPass(double entries[], Neural_Network *network);
-void BackwardPass(double expected, double *entries,
+void BackwardPass(double *expected, double *entries,
                                             Neural_Network *network);
 
 #endif

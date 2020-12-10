@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 #include "traitement.h"
 #include "tools.h"
@@ -48,7 +49,8 @@ char indiceToChar(int indice);
 
 double* imagetomatrix(char* str, int size){
     SDL_Surface *loadedImage = 0;
-    loadedImage = SDL_LoadBMP(str);
+    //loadedImage = SDL_LoadBMP(str);
+    loadedImage = IMG_Load(str);
     double *img = NULL;
 
     if (!loadedImage)
@@ -59,14 +61,14 @@ double* imagetomatrix(char* str, int size){
 
     img = resizechar(loadedImage, size);
 
-    /*for (int k = 0; k < size; k++)
+    for (int k = 0; k < size; k++)
     {
         for (int z = 0; z < size; z++)
         {
-           printf("%d ", (int) img[z*size + k]);
+           printf("%d ", (int) img[k*size + z]);
         }
         printf("\n");
-    }*/
+    }
 
     //SDL_FreeSurface(loadedImage);
     return img;
