@@ -3,7 +3,8 @@
 # include <stdlib.h>
 # include <err.h>
 # include <SDL2/SDL.h>
-# include <SDL2/SDL_image.h>
+#include "all.h"
+
 
 GtkWidget *window;
 GtkWidget *wimage;
@@ -17,11 +18,15 @@ GtkWidget *contra;
 GtkWidget *biner;
 GtkWidget *play;
 GtkWidget *noise;
+GtkWidget *nette;
 GtkWidget *rotation;
 SDL_Surface *surf;
 
 int main(int argc, char *argv[])
 {
+
+ 
+  
   SDL_Init(SDL_INIT_VIDEO);
   GtkBuilder *builder;
   gtk_init(&argc, &argv);
@@ -39,18 +44,20 @@ int main(int argc, char *argv[])
   play = GTK_WIDGET(gtk_builder_get_object(builder, "lanceTout"));
   noise = GTK_WIDGET(gtk_builder_get_object(builder, "noise"));
   rotation = GTK_WIDGET(gtk_builder_get_object(builder, "rotation"));
+  nette = GTK_WIDGET(gtk_builder_get_object(builder, "nettete"));
   g_object_unref(builder);
   gtk_widget_show(window);
   gtk_main();
+
   return 0;
 }
 
 SDL_Surface* load_image(char *path)
 {
   SDL_Surface *img;
-  img = IMG_Load(path);
+  img = SDL_LoadBMP(path);
   if (!img)
-    errx(3, "Can't load %s: %s", path, IMG_GetError());
+    errx(3, "Can't load %s: %s", path, SDL_GetError());
   return img;
 }
 
@@ -65,6 +72,7 @@ void choose_image(char *file)
   gtk_widget_set_sensitive(biner, TRUE);
   gtk_widget_set_sensitive(noise, TRUE);
   gtk_widget_set_sensitive(rotation, TRUE);
+  gtk_widget_set_sensitive(nette, TRUE);
   surf = load_image(file);
   SDL_SaveBMP(surf, "images/temp.bmp");
   SDL_FreeSurface(surf);
@@ -78,11 +86,11 @@ void file_selected(GtkWidget *filechooserbutton)
 }
 
 
-// Il faut juste que tu mettes tes fonctions Ã  la place des commentaires. Si jamais tu as pas certaines fonctions
-// par exemple pour recup le resultat du reseau de neurones dis le moi et je les demanderai Ã  Axelle ou Brice.
+// Il faut juste que tu mettes tes fonctions à la place des commentaires. Si jamais tu as pas certaines fonctions
+// par exemple pour recup le resultat du reseau de neurones dis le moi et je les demanderai à Axelle ou Brice.
 
 
-// Pour les fonctions, l'image Ã  modifier est sauvegardÃ©e dans le fichier images/temp.bmp
+// Pour les fonctions, l'image à modifier est sauvegardée dans le fichier images/temp.bmp
 
 
 void play_button()
@@ -107,7 +115,19 @@ void play_button()
 
 void plus_ninety()
 {
-  //rotation + 90 degrÃ©
+  SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
+  display_img(loadedImage);
+  wait_for_keypressed();
+  grayscale(loadedImage);         
+  binerize(loadedImage); 
+  display_img(rotate(90,loadedImage));
+  wait_for_keypressed();
+  SDL_FreeSurface(loadedImage);      
+}
+
+void nettete()
+{
+  //nettete
 }
 
 void gray()
@@ -122,26 +142,62 @@ void bine()
 
 void seg()
 {
-  //segmentation
+  SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
+  binerize(loadedImage);
+  Neural_Network network = Initialisation();
+  training(&network, 100);
+  char *a = malloc(10000*sizeof(char));
+  __extractpar(loadedImage,&network,a);
+  printf("%s",a);
+  free(a);
+  Free_Network(&network);
 }
 
 void cont()
 {
-  //constrastes
+  SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
+  display_img(loadedImage);
+  wait_for_keypressed();
+  ConstrastRenforcement(loadedImage,100);
+  display_img(loadedImage);
+  wait_for_keypressed();
 }
 
 void rot()
 {
-  //rotation automatique
+  
+  SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
+  display_img(loadedImage);
+  wait_for_keypressed();
+  grayscale(loadedImage);         
+  binerize(loadedImage);    
+  double teta = houghtrasformy(loadedImage);
+
+  if (teta > 90)
+  {
+    teta+=90;
+  }
+  else
+  {
+    teta-=90;
+  }
+                
+ display_img(rotate(teta,loadedImage));
+ wait_for_keypressed();
+ SDL_FreeSurface(loadedImage);        
 }
 
 void noise_reduction()
 {
-  //reduction du bruit
+  SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
+  display_img(loadedImage);
+  wait_for_keypressed();
+  noiseReduction(loadedImage);
+  display_img(loadedImage);
+  wait_for_keypressed();
 }
 
 void on_quit_clicked()
 { 
   gtk_main_quit();
 }
-
