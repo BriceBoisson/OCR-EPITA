@@ -154,8 +154,7 @@ void __extractline(SDL_Surface *img,Neural_Network *network, char *str)
     {
         //printf("coord : %i, %i\n", tab[i],tab[i+1]);
         extractline(copy, tab[i], tab[i+1],network,str); 
-        char a[1];
-        a[0]='\n';
+       char a[]="\n";
         strcat(str,a);         
 
     }

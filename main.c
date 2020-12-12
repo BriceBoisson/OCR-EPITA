@@ -137,7 +137,7 @@ void seg()
   SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
   binerize(loadedImage);
   Neural_Network network = Initialisation();
-  training(&network, 100);
+  //training(&network, 100);
   char *a = malloc(10000*sizeof(char));
   __extractpar(loadedImage,&network,a);
   printf("%s",a);
