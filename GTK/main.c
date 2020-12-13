@@ -20,6 +20,7 @@ GtkWidget *biner;
 GtkWidget *play;
 GtkWidget *noise;
 GtkWidget *rotation;
+GtkWidget *nette;
 SDL_Surface *surf;
 
 int main(int argc, char *argv[])
@@ -45,6 +46,7 @@ int main(int argc, char *argv[])
   play = GTK_WIDGET(gtk_builder_get_object(builder, "lanceTout"));
   noise = GTK_WIDGET(gtk_builder_get_object(builder, "noise"));
   rotation = GTK_WIDGET(gtk_builder_get_object(builder, "rotation"));
+  nette = GTK_WIDGET(gtk_builder_get_object(builder, "nettete"));
   g_object_unref(builder);
   gtk_widget_show(window);
   gtk_main();
@@ -73,6 +75,7 @@ void choose_image(char *file)
   gtk_widget_set_sensitive(noise, TRUE);
   gtk_widget_set_sensitive(rotation, TRUE);
   gtk_widget_set_sensitive(oneeighty, TRUE);
+  gtk_widget_set_sensitive(nette, TRUE);
   surf = load_image(file);
   SDL_SaveBMP(surf, "images/temp.bmp");
   SDL_FreeSurface(surf);
@@ -113,10 +116,16 @@ void play_button()
   gtk_widget_hide(window);
 }
 
+void nettete()
+{
+ // fonction de sharpness
+}
+
 void plus_oneeighty()
 {
  //rotation à 180°
 }
+
 void plus_ninety()
 {
   SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
