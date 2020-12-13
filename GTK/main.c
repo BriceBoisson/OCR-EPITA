@@ -12,13 +12,11 @@ GtkWidget *image;
 GtkWidget *textBox;
 GtkWidget *final;
 GtkWidget *ninety;
-GtkWidget *segm;
 GtkWidget *grays;
 GtkWidget *contra;
 GtkWidget *biner;
 GtkWidget *play;
 GtkWidget *noise;
-GtkWidget *nette;
 GtkWidget *rotation;
 SDL_Surface *surf;
 
@@ -37,14 +35,12 @@ int main(int argc, char *argv[])
   final = GTK_WIDGET(gtk_builder_get_object(builder, "final"));
   textBox = GTK_WIDGET(gtk_builder_get_object(builder, "textBox"));
   ninety = GTK_WIDGET(gtk_builder_get_object(builder, "ninety"));
-  segm = GTK_WIDGET(gtk_builder_get_object(builder, "segmentation"));
   grays = GTK_WIDGET(gtk_builder_get_object(builder, "grayscale"));
   contra  = GTK_WIDGET(gtk_builder_get_object(builder, "contrastes"));
   biner = GTK_WIDGET(gtk_builder_get_object(builder, "binarisation"));
   play = GTK_WIDGET(gtk_builder_get_object(builder, "lanceTout"));
   noise = GTK_WIDGET(gtk_builder_get_object(builder, "noise"));
   rotation = GTK_WIDGET(gtk_builder_get_object(builder, "rotation"));
-  nette = GTK_WIDGET(gtk_builder_get_object(builder, "nettete"));
   g_object_unref(builder);
   gtk_widget_show(window);
   gtk_main();
@@ -65,14 +61,12 @@ SDL_Surface* load_image(char *path)
 void choose_image(char *file)
 {
   gtk_widget_set_sensitive(ninety, TRUE); 
-  gtk_widget_set_sensitive(segm, TRUE);
   gtk_widget_set_sensitive(play, TRUE);
   gtk_widget_set_sensitive(grays, TRUE);
   gtk_widget_set_sensitive(contra, TRUE);
   gtk_widget_set_sensitive(biner, TRUE);
   gtk_widget_set_sensitive(noise, TRUE);
   gtk_widget_set_sensitive(rotation, TRUE);
-  gtk_widget_set_sensitive(nette, TRUE);
   surf = load_image(file);
   SDL_SaveBMP(surf, "images/temp.bmp");
   SDL_FreeSurface(surf);
@@ -86,11 +80,11 @@ void file_selected(GtkWidget *filechooserbutton)
 }
 
 
-// Il faut juste que tu mettes tes fonctions à la place des commentaires. Si jamais tu as pas certaines fonctions
-// par exemple pour recup le resultat du reseau de neurones dis le moi et je les demanderai à Axelle ou Brice.
+// Il faut juste que tu mettes tes fonctions Ã  la place des commentaires. Si jamais tu as pas certaines fonctions
+// par exemple pour recup le resultat du reseau de neurones dis le moi et je les demanderai Ã  Axelle ou Brice.
 
 
-// Pour les fonctions, l'image à modifier est sauvegardée dans le fichier images/temp.bmp
+// Pour les fonctions, l'image Ã  modifier est sauvegardÃ©e dans le fichier images/temp.bmp
 
 
 void play_button()
@@ -125,11 +119,6 @@ void plus_ninety()
   SDL_FreeSurface(loadedImage);      
 }
 
-void nettete()
-{
-  //nettete
-}
-
 void gray()
 {
   //grayscale
@@ -138,19 +127,6 @@ void gray()
 void bine()
 {
   //binarisation
-}
-
-void seg()
-{
-  SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
-  binerize(loadedImage);
-  Neural_Network network = Initialisation();
-  training(&network, 100);
-  char *a = malloc(10000*sizeof(char));
-  __extractpar(loadedImage,&network,a);
-  printf("%s",a);
-  free(a);
-  Free_Network(&network);
 }
 
 void cont()
