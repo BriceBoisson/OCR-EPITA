@@ -12,6 +12,8 @@ GtkWidget *image;
 GtkWidget *textBox;
 GtkWidget *final;
 GtkWidget *ninety;
+GtkWidget *oneeighty;
+GtkWidget *segm;
 GtkWidget *grays;
 GtkWidget *contra;
 GtkWidget *biner;
@@ -35,6 +37,8 @@ int main(int argc, char *argv[])
   final = GTK_WIDGET(gtk_builder_get_object(builder, "final"));
   textBox = GTK_WIDGET(gtk_builder_get_object(builder, "textBox"));
   ninety = GTK_WIDGET(gtk_builder_get_object(builder, "ninety"));
+  oneeighty = GTK_WIDGET(gtk_builder_get_object(builder, "oneeighty"));
+  segm = GTK_WIDGET(gtk_builder_get_object(builder, "segmentation"));
   grays = GTK_WIDGET(gtk_builder_get_object(builder, "grayscale"));
   contra  = GTK_WIDGET(gtk_builder_get_object(builder, "contrastes"));
   biner = GTK_WIDGET(gtk_builder_get_object(builder, "binarisation"));
@@ -61,12 +65,14 @@ SDL_Surface* load_image(char *path)
 void choose_image(char *file)
 {
   gtk_widget_set_sensitive(ninety, TRUE); 
+  gtk_widget_set_sensitive(segm, TRUE);
   gtk_widget_set_sensitive(play, TRUE);
   gtk_widget_set_sensitive(grays, TRUE);
   gtk_widget_set_sensitive(contra, TRUE);
   gtk_widget_set_sensitive(biner, TRUE);
   gtk_widget_set_sensitive(noise, TRUE);
   gtk_widget_set_sensitive(rotation, TRUE);
+  gtk_widget_set_sensitive(oneeighty, TRUE);
   surf = load_image(file);
   SDL_SaveBMP(surf, "images/temp.bmp");
   SDL_FreeSurface(surf);
@@ -107,6 +113,10 @@ void play_button()
   gtk_widget_hide(window);
 }
 
+void plus_oneeighty()
+{
+ //rotation à 180°
+}
 void plus_ninety()
 {
   SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
@@ -127,6 +137,19 @@ void gray()
 void bine()
 {
   //binarisation
+}
+
+void seg()
+{
+  SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
+  binerize(loadedImage);
+  Neural_Network network = Initialisation();
+  //training(&network, 100);
+  char *a = malloc(10000*sizeof(char));
+  __extractpar(loadedImage,&network,a);
+  printf("%s",a);
+  free(a);
+  Free_Network(&network);
 }
 
 void cont()
