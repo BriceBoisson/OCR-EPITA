@@ -1,7 +1,7 @@
 CC=gcc
 CPPFLAGS= -MMD `pkg-config --cflags gtk+-3.0`
 CFLAGS= -Wall -Wextra -std=c99 -g -D_XOPEN_SOURCE=600
-LDLIBS= `pkg-config --libs gtk+-3.0` -lSDL2 -lm -rdynamic -fsanitize=address
+LDLIBS= `pkg-config --libs gtk+-3.0` -lSDL2 -lm -rdynamic
 EXEC= OCR
 
 
