@@ -130,7 +130,6 @@ void nettete()
   display_img(loadedImage);
   wait_for_keypressed();
   loadedImage = Convolute(loadedImage,SharpenMatrix);
-                
   display_img(loadedImage);
   SDL_SaveBMP(loadedImage,"images/temp.bmp");
   wait_for_keypressed();
@@ -142,8 +141,7 @@ void plus_oneeighty()
   SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
   display_img(loadedImage);
   wait_for_keypressed();
-  loadedImage = rotate(180,loadedImage);
-                
+  loadedImage = rotate(180,loadedImage);         
  display_img(loadedImage);
  SDL_SaveBMP(loadedImage,"images/temp.bmp");
  wait_for_keypressed();
@@ -157,8 +155,7 @@ void plus_ninety()
   wait_for_keypressed();
   grayscale(loadedImage);         
   binerize(loadedImage); 
-  loadedImage = rotate(90,loadedImage);
-                
+  loadedImage = rotate(90,loadedImage);           
  display_img(loadedImage);
  SDL_SaveBMP(loadedImage,"images/temp.bmp");
  wait_for_keypressed();
@@ -192,7 +189,6 @@ void cont()
 
 void rot()
 {
-  
   SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
   display_img(loadedImage);
   wait_for_keypressed();
@@ -208,13 +204,11 @@ void rot()
   {
     teta-=90;
   }
-
-  loadedImage = rotate(teta,loadedImage);
-                
- display_img(loadedImage);
- SDL_SaveBMP(loadedImage,"images/temp.bmp");
- wait_for_keypressed();
- SDL_FreeSurface(loadedImage);        
+  loadedImage = rotate(teta,loadedImage);           
+  display_img(loadedImage);
+  SDL_SaveBMP(loadedImage,"images/temp.bmp");
+  wait_for_keypressed();
+  SDL_FreeSurface(loadedImage);        
 }
 
 void noise_reduction()

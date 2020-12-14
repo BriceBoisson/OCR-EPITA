@@ -90,13 +90,12 @@ void array_swap(int array[], size_t i, size_t j)
 }
 void array_select_sort(int array[], size_t len)
 {
-
   size_t i = 0;
   size_t j;
   int min_index;
+
   while(i<len)
   {
-    /* Find Min Index */
     j= i;
     min_index = j;
     while(j<len)
@@ -138,20 +137,22 @@ SDL_Surface* resize(SDL_Surface *img, int x, int y)
                               x,
                               y,
                               img -> format -> BitsPerPixel,0,0,0,0);
-            int w = img -> w;
-            int h = img -> h;
-            float ratioX = (float) w / x;
-            float ratioY = (float) h / y;
-            for (int i = 0; i < x; ++i)
-            {
-                for (int j = 0; j < y; ++j)
-                {
-                    pixel = getpixel(img,(int) (i * ratioX), 
-                                        (int) (j * ratioY));
-                    putpixel(new,i, j, pixel);
-                }
-            }
-            return new;
+    int w = img -> w;
+    int h = img -> h;
+    float ratioX = (float) w / x;
+    float ratioY = (float) h / y;
+
+    for (int i = 0; i < x; ++i)
+    {
+        for (int j = 0; j < y; ++j)
+        {
+        pixel = getpixel(img,(int) (i * ratioX), 
+                            (int) (j * ratioY));
+        putpixel(new,i, j, pixel);
+        }
+    }
+
+    return new;
 }
 
 
@@ -173,12 +174,12 @@ SDL_Surface* CreateWhiteSurface(int x, int y, SDL_Surface* img)
     }
 
     return (new);
-
 }
 
 
 
-
+/*return a new image with a rotation of theta a apply
+in the image in paramaters*/
 SDL_Surface* rotate(double teta, SDL_Surface* img)
 {
     double radian = (teta * M_PI) / 180.0;
@@ -189,14 +190,6 @@ SDL_Surface* rotate(double teta, SDL_Surface* img)
     int h = img->h;
     int w = img->w;
     Uint32 pixel = 0;
-    
-
-    /*if (teta == 90)
-    {
-        int stock = w;
-        w = h;
-        h= stock;
-    }*/
     SDL_Surface * new = CreateWhiteSurface(w,h,img);
 
     for (int i = 0; i < img -> w; i++)
@@ -219,9 +212,11 @@ SDL_Surface* rotate(double teta, SDL_Surface* img)
             }
         }        
     }
+
     return new; 
 }
 
+/*apply hough transformy and return the angle detected*/
 double houghtrasformy(SDL_Surface *img)
 {
     double maxrow = sqrt((img->w*img->w)+(img->h*img->h));
@@ -255,23 +250,28 @@ double houghtrasformy(SDL_Surface *img)
     }
 
     double resulte = maxhough(tab,maxrow);
+    free(tab);
     return resulte;    
 }
 
 double maxhough(int *tab, size_t maxrow)
 {
-    
     double ThetaR;
     int max = 0;
     size_t maxteta = 180;
-    for (size_t i = 0; i < maxrow; ++i) {
-        for (size_t j = 0; j < maxteta; ++j) {
-            if (tab[j + i * maxteta] > max) {
+
+    for (size_t i = 0; i < maxrow; ++i) 
+    {
+        for (size_t j = 0; j < maxteta; ++j) 
+        {
+            if (tab[j + i * maxteta] > max) 
+            {
                 max = tab[j + i * maxteta];
                 ThetaR = j;
             }
         }
     }
+
     return ThetaR;
 }
 
