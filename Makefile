@@ -10,7 +10,7 @@ all: $(EXEC)
 
 OCR: main.o segmentation.o cleanerimage.o tools.o display.o extraction.o extractchar.o structure.o training.o toolsnetworks.o traitement.o Load.o
 	$(CC) -o OCR main.o segmentation.o cleanerimage.o tools.o display.o extraction.o extractchar.o structure.o training.o toolsnetworks.o Load.o traitement.o $(LDLIBS)
-	rm -rf *.o
+	rm -rf *.o *.d
 
 
 main.o: main.c

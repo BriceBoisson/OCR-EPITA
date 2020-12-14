@@ -44,7 +44,7 @@ int training(Neural_Network *network, int nb_repetition)
 	{
 		Free_Network(network);
 		*network = Initialisation();
-		for (int i=0; i<100; i++)
+		for (int i=0; i<20; i++)
 		{
 			err = 0.0;
 			for (int j = 0; j < datasetsize; j++){

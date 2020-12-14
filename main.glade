@@ -132,24 +132,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="segmentation">
-            <property name="label" translatable="yes">Segmentation</property>
-            <property name="name">segm</property>
-            <property name="width-request">125</property>
-            <property name="height-request">80</property>
-            <property name="visible">True</property>
-            <property name="sensitive">False</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="resize-mode">immediate</property>
-            <signal name="clicked" handler="seg" swapped="no"/>
-          </object>
-          <packing>
-            <property name="x">215</property>
-            <property name="y">150</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkButton" id="grayscale">
             <property name="label" translatable="yes">grayscale</property>
             <property name="name">grays</property>
@@ -163,7 +145,7 @@
             <signal name="clicked" handler="gray" swapped="no"/>
           </object>
           <packing>
-            <property name="x">50</property>
+            <property name="x">40</property>
             <property name="y">150</property>
           </packing>
         </child>
@@ -199,7 +181,7 @@
             <signal name="clicked" handler="cont" swapped="no"/>
           </object>
           <packing>
-            <property name="x">400</property>
+            <property name="x">410</property>
             <property name="y">150</property>
           </packing>
         </child>
@@ -218,7 +200,7 @@
           </object>
           <packing>
             <property name="x">285</property>
-            <property name="y">250</property>
+            <property name="y">150</property>
           </packing>
         </child>
         <child>
@@ -236,6 +218,42 @@
           </object>
           <packing>
             <property name="x">40</property>
+            <property name="y">250</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="nettete">
+            <property name="label" translatable="yes">sharpness</property>
+            <property name="name">nette</property>
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="resize-mode">immediate</property>
+            <signal name="clicked" handler="nettete" swapped="no"/>
+          </object>
+          <packing>
+            <property name="x">165</property>
+            <property name="y">150</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="oneeighty">
+            <property name="label" translatable="yes">+180°</property>
+            <property name="name">oneeighty</property>
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="resize-mode">immediate</property>
+            <signal name="clicked" handler="plus_oneeighty" swapped="no"/>
+          </object>
+          <packing>
+            <property name="x">285</property>
             <property name="y">250</property>
           </packing>
         </child>

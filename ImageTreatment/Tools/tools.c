@@ -146,7 +146,8 @@ SDL_Surface* resize(SDL_Surface *img, int x, int y)
             {
                 for (int j = 0; j < y; ++j)
                 {
-                    pixel = getpixel(img,(int) (i * ratioX), (int) (j * ratioY));
+                    pixel = getpixel(img,(int) (i * ratioX), 
+                                        (int) (j * ratioY));
                     putpixel(new,i, j, pixel);
                 }
             }
@@ -185,8 +186,18 @@ SDL_Surface* rotate(double teta, SDL_Surface* img)
     int centery = round(((img->h+1)/2)-1);
     int xprime = 0;
     int yprime = 0;
+    int h = img->h;
+    int w = img->w;
     Uint32 pixel = 0;
-    SDL_Surface * new = CreateWhiteSurface(img->w,img->h,img);
+    
+
+    /*if (teta == 90)
+    {
+        int stock = w;
+        w = h;
+        h= stock;
+    }*/
+    SDL_Surface * new = CreateWhiteSurface(w,h,img);
 
     for (int i = 0; i < img -> w; i++)
     {
@@ -200,7 +211,8 @@ SDL_Surface* rotate(double teta, SDL_Surface* img)
             xprime += certerx;
             yprime += centery;
 
-            if (xprime >= 0 && xprime < img->w && yprime < img->h && yprime >= 0)
+            if (xprime >= 0 && xprime < img->w && yprime < img->h && 
+                yprime >= 0)
             {
                 pixel = getpixel(img,i,j);
                 putpixel(new,xprime,yprime,pixel);

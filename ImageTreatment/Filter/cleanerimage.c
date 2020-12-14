@@ -122,8 +122,8 @@ SDL_Surface* Convolute(SDL_Surface* img, float mask[3][3])
     
   }*/
   
-  display_img(copy);
-  wait_for_keypressed();
+  /*display_img(copy);
+  wait_for_keypressed();*/
   return copy;
 }
 

@@ -12,6 +12,7 @@ GtkWidget *image;
 GtkWidget *textBox;
 GtkWidget *final;
 GtkWidget *ninety;
+GtkWidget *oneeighty;
 GtkWidget *segm;
 GtkWidget *grays;
 GtkWidget *contra;
@@ -19,6 +20,7 @@ GtkWidget *biner;
 GtkWidget *play;
 GtkWidget *noise;
 GtkWidget *rotation;
+GtkWidget *nette;
 SDL_Surface *surf;
 
 int main(int argc, char *argv[])
@@ -36,6 +38,7 @@ int main(int argc, char *argv[])
   final = GTK_WIDGET(gtk_builder_get_object(builder, "final"));
   textBox = GTK_WIDGET(gtk_builder_get_object(builder, "textBox"));
   ninety = GTK_WIDGET(gtk_builder_get_object(builder, "ninety"));
+  oneeighty = GTK_WIDGET(gtk_builder_get_object(builder, "oneeighty"));
   segm = GTK_WIDGET(gtk_builder_get_object(builder, "segmentation"));
   grays = GTK_WIDGET(gtk_builder_get_object(builder, "grayscale"));
   contra  = GTK_WIDGET(gtk_builder_get_object(builder, "contrastes"));
@@ -43,6 +46,7 @@ int main(int argc, char *argv[])
   play = GTK_WIDGET(gtk_builder_get_object(builder, "lanceTout"));
   noise = GTK_WIDGET(gtk_builder_get_object(builder, "noise"));
   rotation = GTK_WIDGET(gtk_builder_get_object(builder, "rotation"));
+  nette = GTK_WIDGET(gtk_builder_get_object(builder, "nettete"));
   g_object_unref(builder);
   gtk_widget_show(window);
   gtk_main();
@@ -70,6 +74,8 @@ void choose_image(char *file)
   gtk_widget_set_sensitive(biner, TRUE);
   gtk_widget_set_sensitive(noise, TRUE);
   gtk_widget_set_sensitive(rotation, TRUE);
+  gtk_widget_set_sensitive(oneeighty, TRUE);
+  gtk_widget_set_sensitive(nette, TRUE);
   surf = load_image(file);
   SDL_SaveBMP(surf, "images/temp.bmp");
   SDL_FreeSurface(surf);
@@ -95,7 +101,7 @@ void play_button()
   GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textBox));
   GtkTextIter iter;
   gtk_text_buffer_get_iter_at_offset(buffer, &iter, 0);
-  char *result = malloc(sizeof(char) * 100000);
+  char *result = malloc(sizeof(char) * 10000);
 
 
   // result sera le texte final
@@ -103,11 +109,46 @@ void play_button()
   // segmentation de l'image
   // envoi au reseau de neurones
   // stockage du resultat du reseau de neurones dans la variable result
+  SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
+  binerize(loadedImage);
+  Neural_Network network = Initialisation();
+  training(&network, 0);
+  
+  __extractpar(loadedImage,&network,result);
+  printf("%s",result);
+  //free(a);
+  Free_Network(&network);
 
 
   gtk_text_buffer_insert(buffer, &iter, result, -1);
   gtk_widget_show(final);
   gtk_widget_hide(window);
+}
+
+void nettete()
+{
+  SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
+  display_img(loadedImage);
+  wait_for_keypressed();
+  loadedImage = Convolute(loadedImage,SharpenMatrix);
+                
+  display_img(loadedImage);
+  SDL_SaveBMP(loadedImage,"images/temp.bmp");
+  wait_for_keypressed();
+  SDL_FreeSurface(loadedImage); 
+}
+
+void plus_oneeighty()
+{
+  SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
+  display_img(loadedImage);
+  wait_for_keypressed();
+  loadedImage = rotate(180,loadedImage);
+                
+ display_img(loadedImage);
+ SDL_SaveBMP(loadedImage,"images/temp.bmp");
+ wait_for_keypressed();
+ SDL_FreeSurface(loadedImage); 
 }
 
 void plus_ninety()
@@ -117,9 +158,12 @@ void plus_ninety()
   wait_for_keypressed();
   grayscale(loadedImage);         
   binerize(loadedImage); 
-  display_img(rotate(90,loadedImage));
-  wait_for_keypressed();
-  SDL_FreeSurface(loadedImage);      
+  loadedImage = rotate(90,loadedImage);
+                
+ display_img(loadedImage);
+ SDL_SaveBMP(loadedImage,"images/temp.bmp");
+ wait_for_keypressed();
+ SDL_FreeSurface(loadedImage);   
 }
 
 void gray()
@@ -134,15 +178,7 @@ void bine()
 
 void seg()
 {
-  SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
-  binerize(loadedImage);
-  Neural_Network network = Initialisation();
-  //training(&network, 100);
-  char *a = malloc(10000*sizeof(char));
-  __extractpar(loadedImage,&network,a);
-  printf("%s",a);
-  free(a);
-  Free_Network(&network);
+
 }
 
 void cont()
@@ -173,8 +209,11 @@ void rot()
   {
     teta-=90;
   }
+
+  loadedImage = rotate(teta,loadedImage);
                 
- display_img(rotate(teta,loadedImage));
+ display_img(loadedImage);
+ SDL_SaveBMP(loadedImage,"images/temp.bmp");
  wait_for_keypressed();
  SDL_FreeSurface(loadedImage);        
 }
@@ -193,4 +232,3 @@ void on_quit_clicked()
 { 
   gtk_main_quit();
 }
-
