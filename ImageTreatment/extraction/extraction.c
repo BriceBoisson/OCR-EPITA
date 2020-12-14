@@ -62,9 +62,7 @@ void extractpar(SDL_Surface* img,int x, int y,Neural_Network *network, char *str
     }
 
     SDL_SaveBMP(new,"final12.bmp");
-    display_img(new);
 
-    wait_for_keypressed();
     __extractline(new,network,str);
     SDL_FreeSurface(new);
 }
@@ -74,17 +72,13 @@ void __extractpar(SDL_Surface* img,Neural_Network *network, char *str)
     SDL_Surface *imagev = copy_image(img);
     SDL_Surface *imagerlsa = copy_image(img);
     SDL_Surface *copy_image1 = copy_image(img);
-    display_img(copy_image1);
 
-    wait_for_keypressed();
 
     blockDetection_vertical(imagev);
     drawBlocks(imagerlsa,imagev);
     drawBlocksLines(copy_image1, imagerlsa);
 
-    display_img(copy_image1);
 
-    wait_for_keypressed();
 
 
 
@@ -128,9 +122,7 @@ void extractline(SDL_Surface *img, int x, int y,Neural_Network *network, char *s
         
     }
     //blockDetection_horizontalv2(new);
-    display_img(new);
 
-    wait_for_keypressed();
 
     SDL_SaveBMP(new,"final13.bmp");
 
@@ -144,9 +136,6 @@ void __extractline(SDL_Surface *img,Neural_Network *network, char *str)
     SDL_Surface* copy = copy_image(img);
     CutLines(copy, 0);
 
-    display_img(copy);
-
-    wait_for_keypressed();
     int count = countlinepar(copy);
     int *tab = malloc(sizeof(int)*count);
     ReturnPosPar(copy, tab);

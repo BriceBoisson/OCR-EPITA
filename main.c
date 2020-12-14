@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
   nette = GTK_WIDGET(gtk_builder_get_object(builder, "nettete"));
   g_object_unref(builder);
   gtk_widget_show(window);
+  g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
   gtk_main();
 
   return 0;
@@ -101,7 +102,7 @@ void play_button()
   GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textBox));
   GtkTextIter iter;
   gtk_text_buffer_get_iter_at_offset(buffer, &iter, 0);
-  char *result = malloc(sizeof(char) * 10000);
+  char *result = calloc(sizeof(char), 10000);
 
 
   // result sera le texte final
@@ -113,14 +114,12 @@ void play_button()
   binerize(loadedImage);
   Neural_Network network = Initialisation();
   Load_Network(&network, "try2.txt");
-  training(&network, 1);
-  Save_Network(&network, "try10.txt");
   __extractpar(loadedImage,&network,result);
   printf("%s",result);
   Free_Network(&network);
-
-
+  SDL_FreeSurface(loadedImage);
   gtk_text_buffer_insert(buffer, &iter, result, -1);
+  free(result);
   gtk_widget_show(final);
   gtk_widget_hide(window);
 }

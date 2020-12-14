@@ -117,14 +117,16 @@ int Load_Network(Neural_Network *network,char* filename)
             for (int k = 0 ; k < nb_w;k++)
             {
                 
-                fgets(cvalue,180,file);
+                fgets(cvalue,128,file);
                 value = strtod(cvalue,&ptr);
                 network->layers[i].cells[j].weights[k]=value;
             }
-            fgets(cvalue,180,file);
+            fgets(cvalue,128,file);
             value = strtod(cvalue,&ptr);
             network->layers[i].cells[j].biais = value;
         }
     }
+
+    free(cvalue);
     return 1;
 }
