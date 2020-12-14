@@ -2,7 +2,7 @@
 #define _EXTRACTION_H
 
 #include "../Segmentation/segmentation.h"
-#include "../../XorToOCR/structure.h"
+#include "../../NeuralNetwork/structure.h"
 
 void extractpar(SDL_Surface* img,int x, int y, Neural_Network *network,char *str);
 int countlinepar(SDL_Surface* img);

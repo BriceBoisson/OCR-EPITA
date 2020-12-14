@@ -112,11 +112,11 @@ void play_button()
   SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
   binerize(loadedImage);
   Neural_Network network = Initialisation();
-  training(&network, 0);
-  
+  Load_Network(&network, "try2.txt");
+  training(&network, 1);
+  Save_Network(&network, "try10.txt");
   __extractpar(loadedImage,&network,result);
   printf("%s",result);
-  //free(a);
   Free_Network(&network);
 
 

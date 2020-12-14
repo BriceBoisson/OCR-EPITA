@@ -6,8 +6,8 @@
 #include "ImageTreatment/Filter/cleanerimage.h"
 #include "ImageTreatment/display.h"
 
-#include "XorToOCR/traitement.h"
-#include "XorToOCR/toolsnetworks.h"
-#include "XorToOCR/training.h"
-#include "XorToOCR/structure.h"
+#include "NeuralNetwork/traitement.h"
+#include "NeuralNetwork/toolsnetworks.h"
+#include "NeuralNetwork/training.h"
+#include "NeuralNetwork/structure.h"
 

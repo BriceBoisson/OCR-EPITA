@@ -2,9 +2,9 @@
 #define _EXTRACTIONCHAR_H
 
 #include "../Segmentation/segmentation.h"
-#include "../../XorToOCR/structure.h"
-#include "../../XorToOCR/traitement.h"
-#include "../../XorToOCR/toolsnetworks.h"
+#include "../../NeuralNetwork/structure.h"
+#include "../../NeuralNetwork/traitement.h"
+#include "../../NeuralNetwork/toolsnetworks.h"
 
 void extractword(SDL_Surface* img,int x, int y,Neural_Network *network,char *str);
 int countwc(SDL_Surface* img);
