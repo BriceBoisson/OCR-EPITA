@@ -126,6 +126,11 @@ void play_button()
 
 void nettete()
 {
+  static float SharpenMatrix[3][3] = {
+            { 0.0, -1.0,  0.0},
+            {-1.0,  5.0, -1.0},
+            { 0.0, -1.0,  0.0}
+        };
   SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
   SDL_Window* window = display_img(loadedImage);
   wait_for_keypressed();

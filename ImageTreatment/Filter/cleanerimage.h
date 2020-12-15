@@ -4,11 +4,7 @@
 
 # include "../Tools/tools.h"
 # include <SDL2/SDL.h>
-static float SharpenMatrix[3][3] = {
-            { 0.0, -1.0,  0.0},
-            {-1.0,  5.0, -1.0},
-            { 0.0, -1.0,  0.0}
-        };
+
 
 void grayscale(SDL_Surface *img);
 
