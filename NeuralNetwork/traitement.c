@@ -12,33 +12,30 @@
 #define NB_OUTPUT 65
 #define DELTA 0.2
 
-// Fonctions de traitement du reseau de neurone : Initialisation, Forward et
-// backpropagation.
+// Fonctions de traitement du reseau de neurone : Initialisation, Forwardpass
+// et backpropagation.
 
-Neural_Network Initialisation()
+void Initialisation(Neural_Network* network)
 {
-    Neural_Network network;
-    network.nb_layers = 2;
-    network.layers = (Neural_Network_Layer*)malloc(network.nb_layers * 
+    network->nb_layers = 2;
+    network->layers = (Neural_Network_Layer*)malloc(network->nb_layers * 
                                                 sizeof(Neural_Network_Layer));
-    network.layers[0] = Create_Layer((int)NB_PIXEL * 2 / 3, NB_PIXEL);
-    network.layers[1] = Create_Layer(NB_OUTPUT, (int)NB_PIXEL * 2 / 3);
-    network.output = 0.0;
-    network.nboutput = NB_OUTPUT;
+    network->layers[0] = Create_Layer((int)NB_PIXEL * 2 / 3, NB_PIXEL);
+    network->layers[1] = Create_Layer(NB_OUTPUT, (int)NB_PIXEL * 2 / 3);
+    network->output = 0.0;
+    network->nboutput = NB_OUTPUT;
     
-    for (int i = 0; i < network.nb_layers; i++)
+    for (int i = 0; i < network->nb_layers; i++)
     {
-        for (int j = 0; j<network.layers[i].nb_cells; j++)
+        for (int j = 0; j<network->layers[i].nb_cells; j++)
         {
-            network.layers[i].cells[j].biais = my_rand();
-            for (int k = 0; k < network.layers[i].cells[j].nb_weight; k++)
+            network->layers[i].cells[j].biais = my_rand();
+            for (int k = 0; k < network->layers[i].cells[j].nb_weight; k++)
             {
-                network.layers[i].cells[j].weights[k] = my_rand();
+                network->layers[i].cells[j].weights[k] = my_rand();
             }
         }
     }
-    
-    return network;
 }
 
 void ForwardPass(double entries[], Neural_Network *network)

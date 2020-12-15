@@ -17,8 +17,8 @@ Neural_Network_Cell Create_Cell(int nb_weight)
     cell.nb_weight = nb_weight;
     cell.biais = 0;
     cell.output = 0;
-    cell.weights = (double*)calloc(nb_weight, sizeof(double));
-    cell.previous_dError = (double*)calloc(nb_weight, sizeof(double));
+    cell.weights = (double*)malloc(nb_weight * sizeof(double));
+    cell.previous_dError = (double*)malloc(nb_weight * sizeof(double));
     return cell;
 }
 
@@ -27,9 +27,10 @@ Neural_Network_Layer Create_Layer(int nb_cell, int nb_weight)
 {
     Neural_Network_Layer layer;
     layer.nb_cells = nb_cell;
-    layer.cells = (Neural_Network_Cell*)malloc(nb_weight * sizeof(Neural_Network_Cell));
+    layer.cells = (Neural_Network_Cell*)
+                            malloc(nb_cell * sizeof(Neural_Network_Cell));
     
-    for (int i = 0; i < nb_weight; i++)
+    for (int i = 0; i < nb_cell; i++)
     {
         *(layer.cells + i) = Create_Cell(nb_weight);
     }
@@ -48,6 +49,7 @@ void Free_Network(Neural_Network *network)
         free(network->layers[i].cells);
     }
     free(network->layers);
+    free(network);
 }
 
 int getIndiceMax(Neural_Network *network)

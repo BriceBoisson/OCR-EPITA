@@ -3,7 +3,7 @@
 #include "structure.h"
 
 
-Neural_Network Initialisation();
+void Initialisation(Neural_Network *network);
 
 void ForwardPass(double entries[], Neural_Network *network);
 

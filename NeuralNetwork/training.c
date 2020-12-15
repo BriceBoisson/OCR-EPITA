@@ -76,7 +76,7 @@ void training(Neural_Network *network, int nb_repetition)
 		free(input[i]);
 	}
     
-	for (int i = 0; i < NB_OUTPUT; i++)
+	for (int i = 0; i < datasetsize; i++)
 	{
 		free(cost[i]);
 	}

@@ -112,11 +112,11 @@ void play_button()
   // stockage du resultat du reseau de neurones dans la variable result
   SDL_Surface * loadedImage = SDL_LoadBMP("images/temp.bmp");
   binerize(loadedImage);
-  Neural_Network network = Initialisation();
-  Load_Network(&network, "try2.txt");
-  __extractpar(loadedImage,&network,result);
-  printf("%s",result);
-  Free_Network(&network);
+  Neural_Network *network = (Neural_Network *)malloc(sizeof(Neural_Network));
+  Initialisation(network);
+  Load_Network(network, "SaveNetwork.txt");
+  __extractpar(loadedImage,network,result);
+  Free_Network(network);
   SDL_FreeSurface(loadedImage);
   gtk_text_buffer_insert(buffer, &iter, result, -1);
   free(result);
