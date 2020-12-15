@@ -84,7 +84,7 @@ void __extractpar(SDL_Surface* img,Neural_Network *network, char *str)
     int *tab = malloc(sizeof(int)*count);
     ReturnPosPar(copy_image1, tab);
 
-    for (int i = 0; i < count; i+=2)
+    for (int i = 0; i < count-1; i+=2)
     {
         extractpar(copy_image1, tab[i], tab[i+1],network,str); 
         char a[] = "\n\n\n";
@@ -127,7 +127,7 @@ void __extractline(SDL_Surface *img,Neural_Network *network, char *str)
     int *tab = malloc(sizeof(int)*count);
     ReturnPosPar(copy, tab);
 
-    for (int i = 0; i < count; i+=2)
+    for (int i = 0; i < count-1; i+=2)
     {
         extractline(copy, tab[i], tab[i+1],network,str); 
         char a[]="\n";

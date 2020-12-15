@@ -132,6 +132,8 @@ void extractchar(SDL_Surface* img,int x, int y,Neural_Network *network,char *str
     }
     if (fullofwhite(new))
     {
+        display_img(new);
+        wait_for_keypressed();
         ForwardPass(segmentationtomatrix(new, 20), network);
         char a[2];
         a[0] = indiceToChar(network->output);

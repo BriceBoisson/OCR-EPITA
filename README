@@ -1,40 +1,21 @@
 Bienvenue dans le projet du group OCReparti pour 15 jours (OCReconfiné).
 
-Vous découvrirez ci-dessous comment compiler et executer nos programmes.
+Vous découvrirez ci-dessous comment compiler, executer et utiliser notre programme.
 
+Pour compiler notre programme simplement tapper la commande 'Make' ou (Make all)
 
-En ce qui concerne la partie de la segmentation et traitement de l'image :
+Ensuite, tapper './OCR' dans votre terminal pour executer notre programme.
 
-Il vous suffit de vous rendre dans le dossier ImageTreatement, la compilation du projet se fait simplement avec la commande "make"
+Premièrement il faut charger une image en .BMP à l'aide du bouton 'Choose a file'
 
-Ensuite pour executer le projet il vous suffit de faire : ./ImageTreatment "le path de l'image" commande 
+Vous verrez ainsi notre interface avec de nombreux boutons, certains ont plus utilités de démonstration que pour la reconnaissance de caractères. Ainsi si les lignes ne sont pas droites appuyer sur sur "Rotation", vous verrez l'image sans le traitement, appuyer sur n'importe quelle touche vous verrez l'image après le traitement et enfin pour fermer la fenêtre de l'aperçu appuyer encore sur n'importe quelle touche. Avec cette manipulation les lignes seront parfaitement droite, toutefois il se peut que l'image soit à l'envers, appuyer alors sur le bouton 180° pour la remettre droite.
 
-Les différentes commandes disponibles sont les suivantes :
+Si votre image manque de contraste, est bruitée ou manque de netteté n'hésiter pas à utiliser les boutons correspondant. Comme précédemment : un aperçu de l'image s'affichera avant le traitement, appuyer sur n'importe quelle touche pour l'afficher après traitement et enfin appuyer sur n'importe quelle touche pour fermer la fenêtre.
 
-- grayscale 
-- binerize 
-- cutchar (découpe les caractères et les lignes)
-- RLSAh 
-- RLSAv 
-- contrast 
-- block (découpe les blocks)
+Les autres boutons sont utilisables mais n'ont pas d'utilités pour notre OCR.
 
-L'image d'origine apparait alors à l'écran, appuyez alors sur n'importe quelles touches pour voir les traitements s'appliquer.
+ Le traitement des niveaux de bruits et de la binarization est appliqué par défaut lorsque vous appuyez sur le bouton Play qui lance l'ensemble du processus segmentation - extraction - OCR.
 
+Après cela vous verrez afficher votre texte reconnu dans l'interface.
 
-Pour la partie réseau de neurone et implémentation du XOR :
-
-Il vous suffit de vous rendre dans le dossier Neural-Network, la compilation du projet se fait simplement avec la commande "make"
-
-Ensuite pour exécuter le projet il vous suffit de faire : ./XOR
-
-Il faut ensuite attendre que le réseau de neurone se calcul, puis vous pourrez entrez des valeurs pour le tester.
-
-Valeurs de test :
-- 0 0
-- 1 0
-- 0 1
-- 1 1
-
-Le résultat de sortie du réseau s’affiche dans le terminal.
-Vous pouvez ensuite soit continuer à effectuer des tests en appuyant sur une touche quelconque, soit appuyer sur q pour quitter le programme.
+Pour nettoyer votre répertoire des .o .d générer par la compilation tapper la commande 'make clean' dans votre terminale.

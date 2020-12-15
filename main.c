@@ -144,13 +144,14 @@ void plus_oneeighty()
   SDL_Window* window = display_img(loadedImage);
   wait_for_keypressed();
   SDL_DestroyWindow(window);
+  grayscale(loadedImage);         
+  binerize(loadedImage); 
   loadedImage = rotate(180,loadedImage);
   window = display_img(loadedImage);         
- display_img(loadedImage);
- SDL_SaveBMP(loadedImage,"images/temp.bmp");
- wait_for_keypressed();
- SDL_DestroyWindow(window);
- SDL_FreeSurface(loadedImage); 
+  SDL_SaveBMP(loadedImage,"images/temp.bmp");
+  wait_for_keypressed();
+  SDL_DestroyWindow(window);
+  SDL_FreeSurface(loadedImage); 
 }
 
 void plus_ninety()
