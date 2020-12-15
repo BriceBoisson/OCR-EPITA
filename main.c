@@ -204,19 +204,11 @@ void rot()
   SDL_Window* window = display_img(loadedImage);
   wait_for_keypressed();
   SDL_DestroyWindow(window);
+  binerize(loadedImage);  
   grayscale(loadedImage);         
-  binerize(loadedImage);    
   double teta = houghtrasformy(loadedImage);
-
-  if (teta > 90)
-  {
-    teta+=90;
-  }
-  else
-  {
-    teta-=90;
-  }
-  loadedImage = rotate(teta,loadedImage);           
+  teta-=90;
+  loadedImage = rotate(teta,loadedImage);         
   window = display_img(loadedImage);
   SDL_SaveBMP(loadedImage,"images/temp.bmp");
   wait_for_keypressed();
