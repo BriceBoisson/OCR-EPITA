@@ -125,7 +125,8 @@ void BackwardPass(double *expected, double *entries,
         for (int j = 0; j < (*network).layers[0].cells[i].nb_weight; j++)
         {
             double f = entries[j];
-            (*network).layers[0].cells[i].weights[j] += DELTA * f * dg * dError;
+            (*network).layers[0].cells[i].weights[j] += 
+                                                    DELTA * f * dg * dError;
         }
 
         (*network).layers[0].cells[i].biais += DELTA * dg * dError;
