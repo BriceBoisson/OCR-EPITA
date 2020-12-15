@@ -27,7 +27,9 @@ typedef struct
 
 Neural_Network_Cell Create_Cell(int nb_weight);
 Neural_Network_Layer Create_Layer(int nb_cell, int nb_weight);
+
 void Free_Network(Neural_Network *network);
+
 int getIndiceMax(Neural_Network *network);
 int Save_Network(Neural_Network *network, char* filename);
 int Load_Network(Neural_Network *network, char* filename);

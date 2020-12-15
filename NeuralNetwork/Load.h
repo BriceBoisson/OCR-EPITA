@@ -9,11 +9,11 @@
 # include <err.h>
 
 
-double* resizechar(SDL_Surface* img, int size);
-
 int FindBlackPixelrow(double *img, int w, int x);
 
 int FindBlackPixelcol(double *img, int w, int h, int x);
+
+double* resizechar(SDL_Surface* img, int size);
 
 double* resizearray(double *img, int w, int h, int x, int y);
 
